@@ -8,6 +8,7 @@
 #include <dxgidebug.h>
 #include <DirectXTex/DirectXTex.h>
 #include<wrl.h>
+#include<chrono>
 
 class DirectXCommon {
 public:
@@ -92,6 +93,8 @@ private:
 	Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> dsvDescriptorHeap_;
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvhandle_;
 
+	std::chrono::steady_clock::time_point reference_;
+
 private:
 	void InitializeDXGIDevice();
 
@@ -106,6 +109,10 @@ private:
 	Microsoft::WRL::ComPtr <ID3D12Resource> CreateDepthStenciltextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, int32_t width, int32_t height);
 
 	void CreateDepthStensil();
+
+	void InitializeFixFPS();
+
+	void UpdateFixFPS();
 };
 
 struct D3DResourceLeakChecker {

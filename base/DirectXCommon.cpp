@@ -12,6 +12,9 @@
 void DirectXCommon::Initialization(const wchar_t* title, int32_t backBufferWidth, int32_t backBufferHeight) {
 	backBufferWidth_ = backBufferWidth;
 	backBufferHeight_ = backBufferHeight;
+
+	// FPS固定初期化
+	InitializeFixFPS();
 	
 	WinApp::GetInstance()->CreateWindowView(title, 1280, 720);
 
@@ -286,6 +289,9 @@ void DirectXCommon::PostDraw() {
 		WaitForSingleObject(fenceEvent_, INFINITE);
 	}
 
+	//FPS固定
+	UpdateFixFPS();
+
 	//次のフレーム用のコマンドリストを準備
 	hr_ = commandAllocator_->Reset();
 	assert(SUCCEEDED(hr_));
@@ -392,4 +398,34 @@ void DirectXCommon::Finalize() {
 DirectXCommon* DirectXCommon::GetInstance() {
 	static DirectXCommon instance;
 	return &instance;
+}
+
+void::DirectXCommon::InitializeFixFPS() {
+	reference_ = std::chrono::steady_clock::now();
+}
+
+void::DirectXCommon::UpdateFixFPS() {
+	// 1/60秒ぴったりの時間
+	const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
+	
+	// 1/60秒よりわずかに短い時間
+	const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
+
+	//現在時間の取得
+	std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+	//前回記録からの経過時間を取得するn
+	std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
+
+	// 1/60秒(よりわずかに短い時間)経っていない場合
+	if (elapsed < kMinTime) {
+		//1/60秒経過するまでスリープを繰り返す
+		while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
+			//1マイクロ秒スリープ
+			std::this_thread::sleep_for(std::chrono::microseconds(1));
+		}
+	}
+
+	//現在の時間を取得する
+	reference_ = std::chrono::steady_clock::now();
+
 }

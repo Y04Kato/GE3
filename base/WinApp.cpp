@@ -1,4 +1,5 @@
 #include "WinApp.h"
+#pragma comment(lib, "winmm.lib")
 
 //ウィンドウプロシージャ
 LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
@@ -51,6 +52,9 @@ void WinApp::CreateWindowView(const wchar_t* title, int32_t clientWidth, int32_t
 		wc_.hInstance,//インスタンスハンドル
 		nullptr//オプション
 	);
+
+	//システムタイマーの分解能を上げる
+	timeBeginPeriod(1);
 
 #ifdef _DEBUG//デバッグレイヤー
 	debugController_ = nullptr;
