@@ -61,7 +61,7 @@ void GamePlayScene::Initialize() {
 	modelMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
 	modelResourceNum_ = 2;
 	model_ = new Model();
-	model_->Initialize(dxCommon_, CJEngine_, "project/gamedata/resources/axis", "axis.obj", modelResourceNum_);
+	model_->Initialize(dxCommon_, CJEngine_, "project/gamedata/resources/fence", "fence.obj", modelResourceNum_);
 
 	//ライト
 	directionalLight_ = { {1.0f,1.0f,1.0f,1.0f},{0.0f,-1.0f,0.0f},1.0f };

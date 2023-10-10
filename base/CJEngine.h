@@ -10,6 +10,23 @@
 #include<vector>
 #include<wrl.h>
 
+enum BlendMode {
+	//ブレンドなし
+	kBlendModeNone,
+	//通常のαブレンド
+	kBlendModeNormal,
+	//加算ブレンド
+	kBlendModeAdd,
+	//減産ブレンド
+	kBlendModeSubtract,
+	//乗算ブレンド
+	kBlendModeMultiply,
+	//スクリーンブレンド
+	kBlendModeScreen,
+	//計算用、利用しない
+	kCountOfBlendMode,
+};
+
 class CitrusJunosEngine {
 public:
 	static CitrusJunosEngine* GetInstance();
@@ -54,7 +71,7 @@ private:
 
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc_{};
 
-	D3D12_BLEND_DESC blendDesc_{};
+	D3D12_BLEND_DESC blendDesc_[kCountOfBlendMode];
 
 	Microsoft::WRL::ComPtr <IDxcBlob> vertexShaderBlob_;
 

@@ -57,7 +57,7 @@ IDxcBlob* CitrusJunosEngine::CompileShader(const std::wstring& filePath, const w
 	return shaderBlob;
 }
 
-void CitrusJunosEngine::InitializeDxcCompiler(){
+void CitrusJunosEngine::InitializeDxcCompiler() {
 	HRESULT hr;
 	dxcUtils_ = nullptr;
 	dxcCompiler_ = nullptr;
@@ -85,7 +85,7 @@ void CitrusJunosEngine::CreateRootSignature() {
 	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VertexShaderで使う
 	rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
-	
+
 	D3D12_DESCRIPTOR_RANGE descriptoraRange[1] = {};
 	descriptoraRange[0].BaseShaderRegister = 0;//0から始まる
 	descriptoraRange[0].NumDescriptors = 1;//数は1つ
@@ -95,7 +95,7 @@ void CitrusJunosEngine::CreateRootSignature() {
 	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixcelShaderを使う
 	rootParameters[2].DescriptorTable.pDescriptorRanges = descriptoraRange;//tableの中身の配列を指定
 	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptoraRange);//Tableで利用する数
-	
+
 	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; //PixcelShaderで使う
 	rootParameters[3].Descriptor.ShaderRegister = 1;//レジスタ番号1を使う
@@ -113,7 +113,7 @@ void CitrusJunosEngine::CreateRootSignature() {
 	descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers);
 
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
-	descriptionRootSignature.NumParameters  = _countof(rootParameters);//配列の長さ
+	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
 
 	//シリアライズしてバイナリにする
 	signatureBlob_ = nullptr;
@@ -154,8 +154,59 @@ void CitrusJunosEngine::CreateInputlayOut() {
 
 void CitrusJunosEngine::BlendState() {
 	//すべての色要素を書き込む
-	blendDesc_.RenderTarget[0].RenderTargetWriteMask =
+	//何もなし
+	blendDesc_[kBlendModeNone].RenderTarget[0].RenderTargetWriteMask =
 		D3D12_COLOR_WRITE_ENABLE_ALL;
+	//通常ブレンド
+	blendDesc_[kBlendModeNormal].RenderTarget[0].RenderTargetWriteMask =
+		D3D12_COLOR_WRITE_ENABLE_ALL;
+	blendDesc_[kBlendModeNormal].RenderTarget[0].BlendEnable = TRUE;
+	blendDesc_[kBlendModeNormal].RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blendDesc_[kBlendModeNormal].RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDesc_[kBlendModeNormal].RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	blendDesc_[kBlendModeNormal].RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc_[kBlendModeNormal].RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDesc_[kBlendModeNormal].RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	//加算ブレンド
+	blendDesc_[kBlendModeAdd].RenderTarget[0].RenderTargetWriteMask =
+		D3D12_COLOR_WRITE_ENABLE_ALL;
+	blendDesc_[kBlendModeAdd].RenderTarget[0].BlendEnable = TRUE;
+	blendDesc_[kBlendModeAdd].RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blendDesc_[kBlendModeAdd].RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDesc_[kBlendModeAdd].RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
+	blendDesc_[kBlendModeAdd].RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc_[kBlendModeAdd].RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDesc_[kBlendModeAdd].RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	//減算ブレンド
+	blendDesc_[kBlendModeSubtract].RenderTarget[0].RenderTargetWriteMask =
+		D3D12_COLOR_WRITE_ENABLE_ALL;
+	blendDesc_[kBlendModeSubtract].RenderTarget[0].BlendEnable = TRUE;
+	blendDesc_[kBlendModeSubtract].RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blendDesc_[kBlendModeSubtract].RenderTarget[0].BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
+	blendDesc_[kBlendModeSubtract].RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
+	blendDesc_[kBlendModeSubtract].RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc_[kBlendModeSubtract].RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDesc_[kBlendModeSubtract].RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	//乗算ブレンド
+	blendDesc_[kBlendModeMultiply].RenderTarget[0].RenderTargetWriteMask =
+		D3D12_COLOR_WRITE_ENABLE_ALL;
+	blendDesc_[kBlendModeMultiply].RenderTarget[0].BlendEnable = TRUE;
+	blendDesc_[kBlendModeMultiply].RenderTarget[0].SrcBlend = D3D12_BLEND_ZERO;
+	blendDesc_[kBlendModeMultiply].RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDesc_[kBlendModeMultiply].RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_COLOR;
+	blendDesc_[kBlendModeMultiply].RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc_[kBlendModeMultiply].RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDesc_[kBlendModeMultiply].RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	//スクリーンブレンド
+	blendDesc_[kBlendModeScreen].RenderTarget[0].RenderTargetWriteMask =
+		D3D12_COLOR_WRITE_ENABLE_ALL;
+	blendDesc_[kBlendModeScreen].RenderTarget[0].BlendEnable = TRUE;
+	blendDesc_[kBlendModeScreen].RenderTarget[0].SrcBlend = D3D12_BLEND_INV_DEST_COLOR;
+	blendDesc_[kBlendModeScreen].RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDesc_[kBlendModeScreen].RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
+	blendDesc_[kBlendModeScreen].RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc_[kBlendModeScreen].RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDesc_[kBlendModeScreen].RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 }
 
 void CitrusJunosEngine::RasterizerState() {
@@ -183,7 +234,7 @@ void CitrusJunosEngine::InitializePSO() {
 		vertexShaderBlob_->GetBufferSize() };//vertexShader
 	graphicsPipelineStateDesc.PS = { pixelShaderBlob_->GetBufferPointer(),
 		pixelShaderBlob_->GetBufferSize() };//pixcelShader
-	graphicsPipelineStateDesc.BlendState = blendDesc_;//BlendState
+	graphicsPipelineStateDesc.BlendState = blendDesc_[kBlendModeNormal];//BlendState
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc_;//rasterizerState
 	//書き込むRTVの情報
 	graphicsPipelineStateDesc.NumRenderTargets = 1;
@@ -221,7 +272,7 @@ void CitrusJunosEngine::ScissorRect() {
 	scissorRect_.bottom = WinApp::kClientHeight;
 }
 
-void CitrusJunosEngine::SettingDepth(){
+void CitrusJunosEngine::SettingDepth() {
 	//DepthStencilStateの設定
 	depthStencilDesc_.DepthEnable = true;//有効化
 	depthStencilDesc_.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;//書き込み
@@ -282,7 +333,7 @@ void CitrusJunosEngine::Finalize() {
 }
 
 void CitrusJunosEngine::Update() {
-	
+
 }
 
 DirectX::ScratchImage CitrusJunosEngine::LoadTexture(const std::string& filePath) {
@@ -301,7 +352,7 @@ DirectX::ScratchImage CitrusJunosEngine::LoadTexture(const std::string& filePath
 	return mipImages;
 }
 
-Microsoft::WRL::ComPtr <ID3D12Resource> CitrusJunosEngine::CreateTextureResource(Microsoft::WRL::ComPtr <ID3D12Device> device, const DirectX::TexMetadata& metadata){
+Microsoft::WRL::ComPtr <ID3D12Resource> CitrusJunosEngine::CreateTextureResource(Microsoft::WRL::ComPtr <ID3D12Device> device, const DirectX::TexMetadata& metadata) {
 	//metadataをもとにResourceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
 	resourceDesc.Width = UINT(metadata.width);//texturの幅
@@ -311,21 +362,21 @@ Microsoft::WRL::ComPtr <ID3D12Resource> CitrusJunosEngine::CreateTextureResource
 	resourceDesc.Format = metadata.format;//TextureのFormat
 	resourceDesc.SampleDesc.Count = 1;//サンプリングカウント。1固定
 	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION(metadata.dimension);//Textureの次元数。普段は2次元
-	
+
 	//利用するheapの設定
 	D3D12_HEAP_PROPERTIES heapProperties{};
 	heapProperties.Type = D3D12_HEAP_TYPE_CUSTOM;//細かい設定を行う
 	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;//WriteBackポリシーでCPUアクセス可能
 	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;//プロセッサの近くに配置
-	
+
 	//Resourceを生成する
 	Microsoft::WRL::ComPtr <ID3D12Resource> resource = nullptr;
 	HRESULT hr = device->CreateCommittedResource(
-		&heapProperties, 
-		D3D12_HEAP_FLAG_NONE, 
-		&resourceDesc, 
+		&heapProperties,
+		D3D12_HEAP_FLAG_NONE,
+		&resourceDesc,
 		D3D12_RESOURCE_STATE_COPY_DEST,
-		nullptr, 
+		nullptr,
 		IID_PPV_ARGS(&resource));
 
 	assert(SUCCEEDED(hr));
@@ -367,29 +418,29 @@ void CitrusJunosEngine::SettingTexture(const std::string& filePath, uint32_t ind
 
 	//SRVを作成するDescripterHeapの場所を決める
 	textureSrvHandleGPU_[index] = GetGPUDescriptorHandle(dxCommon_->GetSrvDescriptiorHeap(), descriptorSizeSRV, index);
-	textureSrvHandleCPU_[index] = GetCPUDescriptorHandle(dxCommon_ -> GetSrvDescriptiorHeap(), descriptorSizeSRV, index);
-	
+	textureSrvHandleCPU_[index] = GetCPUDescriptorHandle(dxCommon_->GetSrvDescriptiorHeap(), descriptorSizeSRV, index);
+
 	//先頭はIMGUIが使ってるので、その次を使う
 	textureSrvHandleCPU_[index].ptr += dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	textureSrvHandleGPU_[index].ptr += dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	
+
 	//SRVの生成
 	dxCommon_->GetDevice()->CreateShaderResourceView(textureResource_[index].Get(), &srvDesc, textureSrvHandleCPU_[index]);
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE CitrusJunosEngine::GetCPUDescriptorHandle(Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> descriptorheap, uint32_t descriptorSize, uint32_t index){
+D3D12_CPU_DESCRIPTOR_HANDLE CitrusJunosEngine::GetCPUDescriptorHandle(Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> descriptorheap, uint32_t descriptorSize, uint32_t index) {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorheap->GetCPUDescriptorHandleForHeapStart();
 	handleCPU.ptr += (descriptorSize * index);
 	return handleCPU;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE CitrusJunosEngine::GetGPUDescriptorHandle(Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> descriptorheap, uint32_t descriptorSize, uint32_t index){
+D3D12_GPU_DESCRIPTOR_HANDLE CitrusJunosEngine::GetGPUDescriptorHandle(Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> descriptorheap, uint32_t descriptorSize, uint32_t index) {
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorheap->GetGPUDescriptorHandleForHeapStart();
 	handleGPU.ptr += (descriptorSize * index);
 	return handleGPU;
 }
 
-CitrusJunosEngine* CitrusJunosEngine::GetInstance(){
+CitrusJunosEngine* CitrusJunosEngine::GetInstance() {
 	static CitrusJunosEngine instance;
 	return &instance;
 }
