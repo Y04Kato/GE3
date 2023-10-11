@@ -41,6 +41,9 @@ public:
 
 	void Update();
 
+	void PreDraw3D();
+	void PreDraw2D();
+
 	DirectXCommon* GetDirectXCommon() { return dxCommon_; }
 
 	CitrusJunosEngine(const CitrusJunosEngine& obj) = delete;
@@ -57,28 +60,12 @@ private:
 
 	IDxcIncludeHandler* includeHandler_;
 
-	Microsoft::WRL::ComPtr <ID3DBlob> signatureBlob_;
-	Microsoft::WRL::ComPtr <ID3DBlob> errorBlob_;
-	Microsoft::WRL::ComPtr <ID3D12RootSignature> rootSignature_;
-
-	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc_{};
-
 	D3D12_BLEND_DESC blendDesc_[kCountOfBlendMode];
-
-	Microsoft::WRL::ComPtr <IDxcBlob> vertexShaderBlob_;
-
-	Microsoft::WRL::ComPtr <IDxcBlob> pixelShaderBlob_;
-
-	D3D12_RASTERIZER_DESC rasterizerDesc_{};
-
-	Microsoft::WRL::ComPtr <ID3D12PipelineState> graphicsPipelineState_;
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
-
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[3];
 
 	//頂点リソースにデータを書き込む
 	Vector4* vertexData_;
@@ -98,12 +85,42 @@ private:
 	);
 
 	void InitializeDxcCompiler();
-	void CreateRootSignature();
-	void CreateInputlayOut();
 	void BlendState();
-	void RasterizerState();
-	void InitializePSO();
 	void ViewPort();
 	void ScissorRect();
 	void SettingDepth();
+
+	//3D用
+	void CreateRootSignature3D();
+	void CreateInputlayOut3D();
+	void RasterizerState3D();
+	void InitializePSO3D();
+	Microsoft::WRL::ComPtr <ID3DBlob> signatureBlob3D_;
+	Microsoft::WRL::ComPtr <ID3DBlob> errorBlob3D_;
+	Microsoft::WRL::ComPtr <ID3D12RootSignature> rootSignature3D_;
+
+	Microsoft::WRL::ComPtr <IDxcBlob> vertexShaderBlob3D_;
+	Microsoft::WRL::ComPtr <IDxcBlob> pixelShaderBlob3D_;
+
+	Microsoft::WRL::ComPtr <ID3D12PipelineState> graphicsPipelineState3D_;
+	D3D12_RASTERIZER_DESC rasterizerDesc3D_{};
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs3D_[3];
+	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc3D_{};
+
+	//2D用
+	void CreateRootSignature2D();
+	void CreateInputlayOut2D();
+	void RasterizerState2D();
+	void InitializePSO2D();
+	Microsoft::WRL::ComPtr<ID3DBlob>signatureBlob2D_;
+	Microsoft::WRL::ComPtr<ID3DBlob>errorBlob2D_;
+	Microsoft::WRL::ComPtr<ID3D12RootSignature>rootSignature2D_;
+
+	IDxcBlob* vertexShaderBlob2D_;
+	IDxcBlob* pixelShaderBlob2D_;
+
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState2D_;
+	D3D12_RASTERIZER_DESC rasterizerDesc2D_{};
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs2D_[2];
+	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc2D_{};
 };

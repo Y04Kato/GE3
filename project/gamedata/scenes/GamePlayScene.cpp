@@ -10,6 +10,7 @@ void GamePlayScene::Initialize() {
 	for (int i = 0; i < 2; i++) {
 		triangle_[i] = new CreateTriangle();
 		triangle_[i]->Initialize();
+		worldTransformTriangle_[i].Initialize();
 		triangleMaterial_[i] = { 1.0f,1.0f,1.0f,1.0f };
 	}
 
@@ -31,8 +32,7 @@ void GamePlayScene::Initialize() {
 
 	for (int i = 0; i < 2; i++) {
 		sprite_[i] = new CreateSprite();
-		sprite_[i]->Initialize(dxCommon_, CJEngine_);
-		worldTransformTriangle_[i].Initialize();
+		sprite_[i]->Initialize(spriteData_.positionLeftTop[i], spriteData_.positionRightDown[i]);
 	}
 
 	isSpriteDraw_ = false;
@@ -209,6 +209,8 @@ void GamePlayScene::Update() {
 
 void GamePlayScene::Draw() {
 #pragma region 3Dオブジェクト描画
+	CJEngine_->PreDraw3D();
+
 	if (isTriangleDraw1_) {//Triangle描画
 		triangle_[0]->Draw(worldTransformTriangle_[0],viewProjection_,triangleMaterial_[0], uvResourceNum_, directionalLight_);
 	}
@@ -228,9 +230,11 @@ void GamePlayScene::Draw() {
 #pragma endregion
 
 #pragma region 前景スプライト描画
+	CJEngine_->PreDraw2D();
+
 	if (isSpriteDraw_) {
 		for (int i = 0; i < 1; i++) {//Sprite描画
-			sprite_[i]->Draw(spriteData_.positionLeftTop[i], spriteData_.positionRightDown[i], spriteTransform_, SpriteuvTransform_, spriteData_.material, uvResourceNum_, directionalLight_);
+			sprite_[i]->Draw(spriteTransform_, SpriteuvTransform_, spriteData_.material, uvResourceNum_);
 		}
 	}
 #pragma endregion

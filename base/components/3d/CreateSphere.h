@@ -18,7 +18,6 @@ public:
 private:
 	void SettingVertex();
 	void SettingColor();
-	void TransformMatrix();
 	void SettingDictionalLight();
 
 private:
@@ -29,9 +28,6 @@ private:
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 	Microsoft::WRL::ComPtr <ID3D12Resource> vertexResource_;
 	VertexData* vertexData_;
-
-	Microsoft::WRL::ComPtr <ID3D12Resource> wvpResource_;
-	TransformationMatrix* wvpData_;
 
 	Microsoft::WRL::ComPtr <ID3D12Resource> materialResource_;
 	Material* materialData_;

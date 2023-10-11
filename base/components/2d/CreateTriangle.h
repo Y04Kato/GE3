@@ -20,8 +20,6 @@ private:
 
 	void SettingColor();
 
-	void TransformMatrix();
-
 	void SettingDictionalLight();
 
 private:
@@ -40,10 +38,6 @@ private:
 	Microsoft::WRL::ComPtr <ID3D12Resource> materialResource_;
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
-
-	//WVP用のリソース
-	Microsoft::WRL::ComPtr <ID3D12Resource> wvpResource_;
-	TransformationMatrix* wvpData_;
 
 	DirectionalLight* directionalLight_;
 	Microsoft::WRL::ComPtr <ID3D12Resource> directionalLightResource_;

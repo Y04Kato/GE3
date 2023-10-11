@@ -1,14 +1,15 @@
 #pragma once
 #include "DirectXCommon.h"
-#include "components/manager/TextureManager.h"
 #include "CJEngine.h"
+#include "components/3d/WorldTransform.h"
+#include "components/manager/TextureManager.h"
 #include<wrl.h>
 
 class CreateSprite{
 public:
-	void Initialize(DirectXCommon* dxCommon, CitrusJunosEngine* engine);
+	void Initialize(const Vector4& a, const Vector4& b);
 
-	void Draw(const Vector4& a, const Vector4& b, const Transform& transform, const Transform& uvTransform, const Vector4& material, uint32_t index, const DirectionalLight& light);
+	void Draw(const Transform& transform, const Transform& uvTransform, const Vector4& material, uint32_t index);
 	void Finalize();
 
 private:
@@ -19,22 +20,20 @@ private:
 	Microsoft::WRL::ComPtr <ID3D12Resource> vertexResourceSprite_;
 	VertexData* vertexData_;
 	
-	Microsoft::WRL::ComPtr <ID3D12Resource> transformationMatrixResource_;
-	TransformationMatrix* transformationMatrixdata_;
 	Microsoft::WRL::ComPtr <ID3D12Resource> materialResource_;
 	Material* materialData_;
 	
 	CitrusJunosEngine* CJEngine_;
-	DirectionalLight* directionalLight_;
-	Microsoft::WRL::ComPtr <ID3D12Resource> directionalLightResource_;
 
 	Microsoft::WRL::ComPtr <ID3D12Resource> indexResourceSprite_;
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_{};
 	uint32_t* indexDataSprite_;
 
+	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
+	Matrix4x4* wvpData_;
+
 private:
-	void SettingVartex();
-	void TransformMatrix();
+	void SettingVertex(const Vector4& a, const Vector4& b);
 	void SettingColor();
-	void SettingDictionalLight();
+	void SettingTransform();
 };

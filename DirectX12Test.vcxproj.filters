@@ -215,6 +215,12 @@
     <FxCompile Include="project\gamedata\resources\shaders\Object3d.VS.hlsl">
       <Filter>ヘッダー ファイル\project\gamedata\resources\shaders</Filter>
     </FxCompile>
+    <FxCompile Include="project\gamedata\resources\shaders\Object2d.VS.hlsl">
+      <Filter>ヘッダー ファイル\project\gamedata\resources\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="project\gamedata\resources\shaders\Object2d.PS.hlsl">
+      <Filter>ヘッダー ファイル\project\gamedata\resources\shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\DirectXCommon.h">
@@ -327,6 +333,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="project\gamedata\resources\shaders\Object3d.hlsli">
+      <Filter>ヘッダー ファイル\project\gamedata\resources\shaders</Filter>
+    </None>
+    <None Include="project\gamedata\resources\shaders\Object2d.hlsli">
       <Filter>ヘッダー ファイル\project\gamedata\resources\shaders</Filter>
     </None>
   </ItemGroup>
