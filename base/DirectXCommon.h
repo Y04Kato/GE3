@@ -6,7 +6,6 @@
 #include <cstdlib>
 #include <dxgi1_6.h>
 #include <dxgidebug.h>
-#include <DirectXTex/DirectXTex.h>
 #include<wrl.h>
 #include<chrono>
 

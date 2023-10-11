@@ -1,25 +1,19 @@
 #include "Model.h"
 
-void Model::Initialize(DirectXCommon* dxCommon, CitrusJunosEngine* engine, const std::string& directoryPath, const std::string& filename, uint32_t index){
-    dxCommon_ = dxCommon;
-    CJEngine_ = engine;
+void Model::Initialize(const std::string& directoryPath, const std::string& filename){
+    dxCommon_ = DirectXCommon::GetInstance();
+    CJEngine_ = CitrusJunosEngine::GetInstance();
+    textureManager_ = TextureManager::GetInstance();
 
     modelData_ = LoadObjFile(directoryPath, filename);
-
-    CJEngine_->SettingTexture(modelData_.material.textureFilePath, index);
+    texture_ = textureManager_->Load(modelData_.material.textureFilePath);
   
     CreateVartexData();
     SetColor();
-    TransformMatrix();
     CreateDictionalLight();
 }
 
-void Model::Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Matrix4x4 viewMatrix, const DirectionalLight& light){
-    Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
-    Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(dxCommon_->GetWin()->kClientWidth) / float(dxCommon_->GetWin()->kClientHeight), 0.1f, 100.0f);
-
-    Matrix4x4 wvpMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
-
+void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, const DirectionalLight& light){
     Transform uvTransform = { { 1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
 
     Matrix4x4 uvtransformMtrix = MakeScaleMatrix(uvTransform.scale);
@@ -28,7 +22,6 @@ void Model::Draw(const Vector4& material, const Transform& transform, uint32_t t
 
     *material_ = { material,false };
     material_->uvTransform = uvtransformMtrix;
-    *wvpData_ = { wvpMatrix,worldMatrix };
     *directionalLight_ = light;
 
     dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
@@ -36,15 +29,22 @@ void Model::Draw(const Vector4& material, const Transform& transform, uint32_t t
     dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
     dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-    dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+    dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBuff_->GetGPUVirtualAddress());
+    dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
 
-    dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, CJEngine_->textureSrvHandleGPU_[texIndex]);
+    dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(texture_));
     dxCommon_->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 
 }
 
 void Model::Finalize(){
 
+}
+
+Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::string& filename){
+    Model* model = new Model();
+    model->Initialize(directoryPath, filename);
+    return model;
 }
 
 ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename){
@@ -163,12 +163,6 @@ void Model::SetColor(){
     materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&material_));
     material_->uvTransform = MakeIdentity4x4();
 
-}
-
-void Model::TransformMatrix(){
-    wvpResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice(), sizeof(TransformationMatrix));
-    wvpResource_->Map(0, NULL, reinterpret_cast<void**>(&wvpData_));
-    wvpData_->WVP = MakeIdentity4x4();
 }
 
 void Model::CreateDictionalLight(){

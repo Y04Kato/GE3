@@ -15,8 +15,14 @@ struct PixelShaderOutput {
 };
 
 struct TransformationMatrix {
-	float32_t4x4 WVP;
-	float32_t4x4 World;
+
+	float32_t4x4 matWorld;
+};
+
+struct ViewProjectionMatrix {
+	float32_t4x4 view;
+	float32_t4x4 projection;
+	float32_t3 camera;
 };
 
 struct Material {

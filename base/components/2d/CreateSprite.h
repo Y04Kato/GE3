@@ -1,6 +1,6 @@
 #pragma once
 #include "DirectXCommon.h"
-#include "components/math/Vector.h"
+#include "components/manager/TextureManager.h"
 #include "CJEngine.h"
 #include<wrl.h>
 
@@ -13,13 +13,17 @@ public:
 
 private:
 	DirectXCommon* dxCommon_;
+	TextureManager* textureManager_;
+
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 	Microsoft::WRL::ComPtr <ID3D12Resource> vertexResourceSprite_;
 	VertexData* vertexData_;
+	
 	Microsoft::WRL::ComPtr <ID3D12Resource> transformationMatrixResource_;
 	TransformationMatrix* transformationMatrixdata_;
 	Microsoft::WRL::ComPtr <ID3D12Resource> materialResource_;
 	Material* materialData_;
+	
 	CitrusJunosEngine* CJEngine_;
 	DirectionalLight* directionalLight_;
 	Microsoft::WRL::ComPtr <ID3D12Resource> directionalLightResource_;

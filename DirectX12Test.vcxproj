@@ -91,7 +91,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="base\components\3d\ViewProjection.cpp" />
+    <ClCompile Include="base\components\3d\WorldTransform.cpp" />
     <ClCompile Include="base\components\audio\Audio.cpp" />
+    <ClCompile Include="base\components\manager\TextureManager.cpp" />
     <ClCompile Include="base\components\utilities\convertString\ConvertString.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\components\2d\CreateTriangle.cpp" />
@@ -133,7 +136,10 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="base\components\3d\ViewProjection.h" />
+    <ClInclude Include="base\components\3d\WorldTransform.h" />
     <ClInclude Include="base\components\audio\Audio.h" />
+    <ClInclude Include="base\components\manager\TextureManager.h" />
     <ClInclude Include="base\components\utilities\convertString\ConvertString.h" />
     <ClInclude Include="base\DirectXCommon.h" />
     <ClInclude Include="base\components\2d\CreateTriangle.h" />

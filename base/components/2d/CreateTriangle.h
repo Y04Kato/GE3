@@ -1,16 +1,17 @@
 #pragma once
 #include "DirectXCommon.h"
-#include "components/math/Vector.h"
-#include "components/math/MatrixCalculation.h"
+#include "components/3d/WorldTransform.h"
+#include "components/3d/ViewProjection.h"
+#include "components/manager/TextureManager.h"
 #include<wrl.h>
 
 class CitrusJunosEngine;
 
 class CreateTriangle {
 public:
-	void Initialize(DirectXCommon* dxCommon, CitrusJunosEngine* engine);
+	void Initialize();
 
-	void Draw(const TriangleData& data,const Transform& transform, const Matrix4x4 viewMatrix, uint32_t index, const DirectionalLight& light);
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, uint32_t index, const DirectionalLight& light);
 
 	void Finalize();
 
@@ -27,6 +28,8 @@ private:
 	CitrusJunosEngine* CJEngine_;
 
 	DirectXCommon* dxCommon_;
+
+	TextureManager* textureManager_;
 
 	VertexData* vertexData_;
 

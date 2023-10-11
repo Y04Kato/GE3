@@ -4,6 +4,7 @@
 #include "components/input/Input.h"
 #include "components/audio/Audio.h"
 #include "components/utilities/GlobalVariables/GlobalVariables.h"
+#include "components/manager/TextureManager.h"
 
 //sceneInclude
 #include "gamedata/scenes/GameTitleScene.h"
@@ -32,6 +33,7 @@ private:
 
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
+	TextureManager* textureManager = nullptr;
 
 	std::unique_ptr<Iscene>scene_[SCENE_MAX];
 };

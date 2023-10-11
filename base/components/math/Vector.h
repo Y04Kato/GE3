@@ -17,9 +17,10 @@ struct Vector4 {
 	float num[4];
 };
 
-struct TriangleData {
-	Vector4 position[3];
-	Vector4 material;
+struct Transform {
+	Vector3 scale;
+	Vector3 rotate;
+	Vector3 translate;
 };
 
 struct SpriteData {

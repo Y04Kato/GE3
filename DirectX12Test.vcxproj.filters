@@ -198,6 +198,15 @@
     <ClCompile Include="base\components\3d\Model.cpp">
       <Filter>ソース ファイル\base\components\3d</Filter>
     </ClCompile>
+    <ClCompile Include="base\components\3d\WorldTransform.cpp">
+      <Filter>ソース ファイル\base\components\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="base\components\manager\TextureManager.cpp">
+      <Filter>ソース ファイル\base\components\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="base\components\3d\ViewProjection.cpp">
+      <Filter>ソース ファイル\base\components\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="project\gamedata\resources\shaders\Object3d.PS.hlsl">
@@ -300,6 +309,15 @@
     </ClInclude>
     <ClInclude Include="base\components\manager\Iscene.h">
       <Filter>ヘッダー ファイル\base\components\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="base\components\3d\WorldTransform.h">
+      <Filter>ヘッダー ファイル\base\components\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="base\components\manager\TextureManager.h">
+      <Filter>ヘッダー ファイル\base\components\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="base\components\3d\ViewProjection.h">
+      <Filter>ヘッダー ファイル\base\components\3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,7 @@
 void CreateSprite::Initialize(DirectXCommon* dxCommon, CitrusJunosEngine* engine){
 	dxCommon_ = dxCommon;
 	CJEngine_ = engine;
+	textureManager_ = TextureManager::GetInstance();
 	SettingVartex();
 	SettingColor();
 	TransformMatrix();
@@ -53,7 +54,7 @@ void CreateSprite::Draw(const Vector4& a, const Vector4& b, const Transform& tra
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
-	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, CJEngine_->textureSrvHandleGPU_[index]);
+	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(index));
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	dxCommon_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);

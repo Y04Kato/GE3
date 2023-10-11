@@ -24,6 +24,10 @@ void SceneManager::Initialize() {
 	input_ = Input::GetInstance();
 	input_->Initialize();
 
+	//TextureManager
+	textureManager = TextureManager::GetInstance();
+	textureManager->Initialize();
+
 	//CSV
 	GlobalVariables::GetInstance()->LoadFiles();
 

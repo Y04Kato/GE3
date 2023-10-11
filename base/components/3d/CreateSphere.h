@@ -1,16 +1,17 @@
 #pragma once
 #include "DirectXCommon.h"
-#include "components/math/Vector.h"
-#include "components/math/MatrixCalculation.h"
+#include "components/3d/WorldTransform.h"
+#include "components/3d/ViewProjection.h"
+#include "components/manager/TextureManager.h"
 #include<wrl.h>
 
 class CitrusJunosEngine;
 
 class CreateSphere{
 public:
-	void Initialize(DirectXCommon* dxCommon, CitrusJunosEngine* engine);
+	void Initialize();
 
-	void Draw(const Vector4& material, const Transform& transform, uint32_t index, const Matrix4x4 viewMatrix, const DirectionalLight& light);
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, uint32_t index, const DirectionalLight& light);
 	
 	void Finalize();
 
@@ -23,6 +24,7 @@ private:
 private:
 	DirectXCommon* dxCommon_;
 	CitrusJunosEngine* CJEngine_;
+	TextureManager* textureManager_;
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 	Microsoft::WRL::ComPtr <ID3D12Resource> vertexResource_;

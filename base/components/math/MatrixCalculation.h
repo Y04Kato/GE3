@@ -4,12 +4,6 @@
 #include <assert.h>
 #include <cmath>
 
-struct Transform{
-	Vector3 scale;
-	Vector3 rotate;
-	Vector3 translate;
-};
-
 float cot(float theta);
 float Length(const Vector3& v);
 float Dot(const Vector3& v1, const Vector3& v2);

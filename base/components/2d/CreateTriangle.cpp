@@ -2,41 +2,35 @@
 #include "CJEngine.h"
 #include <assert.h>
 
-void CreateTriangle::Initialize(DirectXCommon* dxCommon, CitrusJunosEngine* engine) {
-	dxCommon_ = dxCommon;
-	CJEngine_ =  engine;
+void CreateTriangle::Initialize() {
+	dxCommon_ = DirectXCommon::GetInstance();
+	CJEngine_ = CitrusJunosEngine::GetInstance();
+	textureManager_ = TextureManager::GetInstance();
 	SettingVertex();
 	SettingColor();
-	TransformMatrix();
 	SettingDictionalLight();
+
+	//左下
+	vertexData_[0].position = { -0.5f,0.0f,0.0f,1.0f };
+	vertexData_[0].texcoord = { 0.0f,1.0f };
+
+	//上
+	vertexData_[1].position = { 0.0f,1.0f,0.0f,1.0f };
+	vertexData_[1].texcoord = { 0.5f,0.0f };
+
+	//右下
+	vertexData_[2].position = { 0.5f,0.0f,0.0f,1.0f };
+	vertexData_[2].texcoord = { 1.0f,1.0f };
 }
 
-void CreateTriangle::Draw(const TriangleData& data, const Transform& transform, const Matrix4x4 viewMatrix, uint32_t index, const DirectionalLight& light) {
-	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
-	Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(dxCommon_->GetWin()->kClientWidth) / float(dxCommon_->GetWin()->kClientHeight), 0.1f, 100.0f);
-
-	Matrix4x4 wvpMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
-
+void CreateTriangle::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, uint32_t index, const DirectionalLight& light) {
 	Transform uvTransform = { { 1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
 	Matrix4x4 uvtransformMtrix = MakeScaleMatrix(uvTransform.scale);
 	uvtransformMtrix = Multiply(uvtransformMtrix, MakeRotateZMatrix(uvTransform.rotate.num[2]));
 	uvtransformMtrix = Multiply(uvtransformMtrix, MakeTranslateMatrix(uvTransform.translate));
 
-	//左下
-	vertexData_[0].position = data.position[0];
-	vertexData_[0].texcoord = { 0.0f,1.0f };
-
-	//上
-	vertexData_[1].position = data.position[1];
-	vertexData_[1].texcoord = { 0.5f,0.0f };
-
-	//右下
-	vertexData_[2].position = data.position[2];
-	vertexData_[2].texcoord = { 1.0f,1.0f };
-
-	*materialData_ = { data.material,false };
+	*materialData_ = { material,false };
 	materialData_->uvTransform = uvtransformMtrix;
-	*wvpData_ = { wvpMatrix,worldMatrix };
 	*directionalLight_ = light;
 
 	//VBVを設定
@@ -48,10 +42,11 @@ void CreateTriangle::Draw(const TriangleData& data, const Transform& transform, 
 	//マテリアルCBufferの場所を設定
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBuff_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]のこと
-	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, CJEngine_->textureSrvHandleGPU_[index]);
+	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(index));
 
 	//描画
 	dxCommon_->GetCommandList()->DrawInstanced(3, 1, 0, 0);

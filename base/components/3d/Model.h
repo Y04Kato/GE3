@@ -1,7 +1,9 @@
 #pragma once
 #include "DirectXCommon.h"
 #include "CJEngine.h"
-#include "components/math/Vector.h"
+#include "components/3d/WorldTransform.h"
+#include "components/3d/ViewProjection.h"
+#include "components/manager/TextureManager.h"
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -9,9 +11,9 @@
 
 class Model {
 public:
-	void Initialize(DirectXCommon* dxCommon, CitrusJunosEngine* engine, const std::string& directoryPath, const std::string& filename, uint32_t index);
+	void Initialize(const std::string& directoryPath, const std::string& filename);
 
-	void Draw(const Vector4& material, const Transform& transform, uint32_t index, const Matrix4x4 viewMatrix, const DirectionalLight& light);
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, const DirectionalLight& light);
 	
 	void Finalize();
 
@@ -20,18 +22,22 @@ public:
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
 
+	static Model* CreateModelFromObj(const std::string& directoryPath, const std::string& filename);
+
 private:
 	DirectXCommon* dxCommon_;
 	CitrusJunosEngine* CJEngine_;
+	TextureManager* textureManager_;
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 	Microsoft::WRL::ComPtr <ID3D12Resource> vertexResource_;
 	VertexData* vertexData_;
 
 	Microsoft::WRL::ComPtr <ID3D12Resource> wvpResource_;
-	TransformationMatrix* wvpData_;
 	Microsoft::WRL::ComPtr <ID3D12Resource> materialResource_;
 	Material* material_;
+
+	uint32_t texture_;
 
 	DirectionalLight* directionalLight_;
 	Microsoft::WRL::ComPtr <ID3D12Resource> directionalLightResource_;
@@ -39,7 +45,6 @@ private:
 private:
 	void CreateVartexData();
 	void SetColor();
-	void TransformMatrix();
 	void CreateDictionalLight();
 
 };

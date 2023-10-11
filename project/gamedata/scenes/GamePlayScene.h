@@ -2,7 +2,9 @@
 #include "components/manager/Iscene.h"
 #include "components/audio/Audio.h"
 #include "components/input/Input.h"
-#include "components/math/Vector.h"
+#include "components/3d/WorldTransform.h"
+#include "components/3d/ViewProjection.h"
+#include "components/manager/TextureManager.h"
 #include "components/2d/CreateTriangle.h"
 #include "components/2d/CreateSprite.h"
 #include "components/3d/CreateSphere.h"
@@ -23,10 +25,14 @@ public:
 private:
 	CitrusJunosEngine* CJEngine_;
 	DirectXCommon* dxCommon_;
+	ViewProjection viewProjection_;
+	TextureManager* textureManager_;
+
+	int blendCount_;
 
 	CreateTriangle* triangle_[2];
-	TriangleData triangleData_[2];
-	Transform triangleTransform_[2];
+	WorldTransform worldTransformTriangle_[2];
+	Vector4 triangleMaterial_[2];
 
 	CreateSprite* sprite_[2];
 	SpriteData spriteData_;
@@ -34,18 +40,17 @@ private:
 	Transform SpriteuvTransform_;
 
 	CreateSphere* sphere_;
-	Transform sphereTransform_;
+	WorldTransform worldTransformSphere_;
 	Vector4 sphereMaterial_;
 
 	Model* model_;
-	Transform modelTransform_;
+	WorldTransform worldTransformModel_;
 	Vector4 modelMaterial_;
 
 	DirectionalLight directionalLight_;
 
 	uint32_t uvResourceNum_;
 	uint32_t monsterBallResourceNum_;
-	uint32_t modelResourceNum_;
 
 	Audio* audio_;
 	SoundData soundData1_;
