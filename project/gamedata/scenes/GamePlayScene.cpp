@@ -14,6 +14,8 @@ void GamePlayScene::Initialize() {
 		triangleMaterial_[i] = { 1.0f,1.0f,1.0f,1.0f };
 	}
 
+	worldTransformTriangle_[1].rotation_.num[1] = 0.7f;
+
 	isTriangleDraw1_ = false;
 	isTriangleDraw2_ = false;
 
@@ -93,6 +95,11 @@ void GamePlayScene::Update() {
 	collisionManager_->ClearColliders();
 	collisionManager_->CheckAllCollision();
 
+	input_->Update();
+	debugCamera_->Update();
+
+	viewProjection_.translation_ = debugCamera_->GetViewProjection()->translation_;
+	viewProjection_.rotation_ = debugCamera_->GetViewProjection()->rotation_;
 	viewProjection_.UpdateMatrix();
 
 	if (input_->PressKey(DIK_A)) {
@@ -109,8 +116,6 @@ void GamePlayScene::Update() {
 
 	ImGui::Begin("debug");
 	ImGui::Text("GamePlayScene");
-	ImGui::Text("DebugCameraTranslate:ArrowKey");
-	ImGui::Text("DebugCameraRotate:WASD");
 	if (ImGui::TreeNode("Triangle")) {//三角形
 		if (ImGui::Button("DrawTriangle1")) {
 			if (isTriangleDraw1_ == false) {
@@ -202,9 +207,6 @@ void GamePlayScene::Update() {
 	ImGui::Text("%f", ImGui::GetIO().Framerate);
 
 	ImGui::End();
-
-	input_->Update();
-	debugCamera_->Update();
 }
 
 void GamePlayScene::Draw() {

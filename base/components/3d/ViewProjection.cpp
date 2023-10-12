@@ -18,6 +18,7 @@ void ViewProjection::Map() {
 void ViewProjection::UpdateMatrix() {
 	UpdateViewMatrix();
 	UpdateProjectionMatrix();
+	TransferMatrix();
 }
 
 void ViewProjection::TransferMatrix() {
