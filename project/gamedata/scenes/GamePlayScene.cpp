@@ -214,20 +214,18 @@ void GamePlayScene::Draw() {
 	CJEngine_->PreDraw3D();
 
 	if (isTriangleDraw1_) {//Triangle描画
-		triangle_[0]->Draw(worldTransformTriangle_[0],viewProjection_,triangleMaterial_[0], uvResourceNum_, directionalLight_);
+		triangle_[0]->Draw(worldTransformTriangle_[0], viewProjection_, triangleMaterial_[0], uvResourceNum_, directionalLight_);
 	}
 	if (isTriangleDraw2_) {//Triangle描画
 		triangle_[1]->Draw(worldTransformTriangle_[1], viewProjection_, triangleMaterial_[1], uvResourceNum_, directionalLight_);
 	}
 
 	if (isSphereDraw_) {
-		sphere_->Draw(worldTransformSphere_,viewProjection_, sphereMaterial_, texture_, directionalLight_);
+		sphere_->Draw(worldTransformSphere_, viewProjection_, sphereMaterial_, texture_, directionalLight_);
 	}
 
 	if (isModelDraw_) {
-		for (int i = 0; i < 400; i++) {
-			model_->Draw(worldTransformModel_,viewProjection_,modelMaterial_, directionalLight_);
-		}
+		model_->Draw(worldTransformModel_, viewProjection_, modelMaterial_, directionalLight_);
 	}
 #pragma endregion
 
