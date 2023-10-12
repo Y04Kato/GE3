@@ -13,10 +13,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{cbb2464c-e453-49fd-aeb8-10dc1a1b6732}</ProjectGuid>
-    <RootNamespace>DirectX12Test</RootNamespace>
+    <ProjectGuid>{7D25C9B0-5A68-4092-AC47-F191F1580DB0}</ProjectGuid>
+    <RootNamespace>CitrusJunosEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>CG2</ProjectName>
+    <ProjectName>CitrusJunosEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
