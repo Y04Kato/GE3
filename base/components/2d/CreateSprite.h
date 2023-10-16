@@ -31,7 +31,6 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
 	Matrix4x4* wvpData_;
-
 private:
 	void SettingVertex(const Vector4& a, const Vector4& b);
 	void SettingColor();

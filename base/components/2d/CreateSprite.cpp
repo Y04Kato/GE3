@@ -1,33 +1,33 @@
 #include "CreateSprite.h"
 
-void CreateSprite::Initialize(const Vector4& a, const Vector4& b){
+void CreateSprite::Initialize(const Vector4& a, const Vector4& b) {
 	dxCommon_ = DirectXCommon::GetInstance();
 	CJEngine_ = CitrusJunosEngine::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
-	SettingVertex(a,b);
+	SettingVertex(a, b);
 	SettingColor();
 	SettingTransform();
 }
 
-void CreateSprite::Draw(const Transform& transform, const Transform& uvTransform, const Vector4& material, uint32_t index){
+void CreateSprite::Draw(const Transform& transform, const Transform& uvTransform, const Vector4& material, uint32_t index) {
 	Matrix4x4 uvtransformMtrix = MakeScaleMatrix(uvTransform.scale);
 	uvtransformMtrix = Multiply(uvtransformMtrix, MakeRotateZMatrix(uvTransform.rotate.num[2]));
 	uvtransformMtrix = Multiply(uvtransformMtrix, MakeTranslateMatrix(uvTransform.translate));
 
 	*materialData_ = { material,false };
 	materialData_->uvTransform = uvtransformMtrix;
-	
+
 	//Sprite用のworldViewProjectionMatrixを作る
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 viewMatrix = MakeIdentity4x4();
 	Matrix4x4 projectionmatrix = MakeOrthographicMatrix(0.0f, 0.0f, (float)dxCommon_->GetWin()->kClientWidth, (float)dxCommon_->GetWin()->kClientHeight, 0.0f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionmatrix));
 	*wvpData_ = worldViewProjectionMatrix;
-	
+
 	//描画
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	dxCommon_->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite_);
-	
+
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
@@ -36,11 +36,11 @@ void CreateSprite::Draw(const Transform& transform, const Transform& uvTransform
 	dxCommon_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
-void CreateSprite::Finalize(){
+void CreateSprite::Finalize() {
 
 }
 
-void CreateSprite::SettingVertex(const Vector4& a, const Vector4& b){
+void CreateSprite::SettingVertex(const Vector4& a, const Vector4& b) {
 	//Sprite用のリソースを作る
 	vertexResourceSprite_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * 6);
 
@@ -97,9 +97,10 @@ void CreateSprite::SettingColor() {
 	materialResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(Material));
 
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialData_->uvTransform = MakeIdentity4x4();
 }
 
-void CreateSprite::SettingTransform(){
+void CreateSprite::SettingTransform() {
 	wvpResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice().Get(), sizeof(Matrix4x4));
 	wvpResource_->Map(0, NULL, reinterpret_cast<void**>(&wvpData_));
 	*wvpData_ = MakeIdentity4x4();

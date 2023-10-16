@@ -318,8 +318,8 @@ void CitrusJunosEngine::InitializePSO2D() {
 	assert(SUCCEEDED(hr));
 }
 void CitrusJunosEngine::RasterizerState2D() {
-	//裏面（時計回り）を表示しない
-	rasterizerDesc2D_.CullMode = D3D12_CULL_MODE_BACK;
+	//裏面（時計回り）を表示する
+	rasterizerDesc2D_.CullMode = D3D12_CULL_MODE_NONE;
 	//三角形の中を塗りつぶす
 	rasterizerDesc2D_.FillMode = D3D12_FILL_MODE_SOLID;
 
