@@ -14,4 +14,6 @@ public:
 
 private:
 	ViewProjection viewProjection_;
+
+	Input* input_;
 };
