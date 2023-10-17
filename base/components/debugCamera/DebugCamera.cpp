@@ -33,3 +33,14 @@ void DebugCamera::Update() {
 	ImGui::End();
 	viewProjection_.UpdateMatrix();
 }
+
+void DebugCamera::ShakeCamera(int shakePower, int dividePower) {
+	viewProjection_.translation_.num[0] += (rand() % shakePower - shakePower / 2 + rand() / (float)RAND_MAX) / dividePower;
+	viewProjection_.translation_.num[1] += (rand() % shakePower - shakePower / 2 + rand() / (float)RAND_MAX) / dividePower;
+	viewProjection_.translation_.num[2] += (rand() % shakePower - shakePower / 2 + rand() / (float)RAND_MAX) / dividePower;
+}
+
+void DebugCamera::SetCamera(Vector3 translation, Vector3 rotation) {
+	viewProjection_.translation_ = translation;
+	viewProjection_.rotation_ = rotation;
+}
