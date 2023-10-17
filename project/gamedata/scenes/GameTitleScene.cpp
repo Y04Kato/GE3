@@ -9,10 +9,9 @@ void GameTitleScene::Initialize(){
 }
 
 void GameTitleScene::Update(){
-	if (input_->PressKey(DIK_N)) {
+	if (input_->TriggerKey(DIK_N)) {
 		sceneNo = 1;
 	}
-	input_->Update();
 
 	ImGui::Begin("debug");
 	ImGui::Text("GameTitleScene");

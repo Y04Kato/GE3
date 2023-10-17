@@ -1,5 +1,4 @@
 #include "Input.h"
-#include <cassert>
 #define XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE  7849
 #define XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE 8689
 
@@ -25,8 +24,7 @@ void Input::Initialize() {
 
 	//排他制御レベルのセット
 	result = keyboard_->SetCooperativeLevel(
-		WinApp::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY
-	);
+		WinApp::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 
 	key_ = {};
 	preKey_ = {};
@@ -43,7 +41,7 @@ void Input::Update() {
 }
 
 bool Input::TriggerKey(BYTE keyNumber) const {
-	if (!preKey_[keyNumber] && key_[keyNumber]) {
+	if (key_[keyNumber] != 0 && preKey_[keyNumber] == 0) {
 		return true;
 	}
 	else {
@@ -61,7 +59,7 @@ bool Input::PressKey(BYTE keyNumber)const {
 }
 
 bool Input::ReleaseKey(BYTE keyNumber)const {
-	if (preKey_[keyNumber] && !key_[keyNumber]) {
+	if (key_[keyNumber] == 0 && preKey_[keyNumber] != 0) {
 		return true;
 	}
 	else {

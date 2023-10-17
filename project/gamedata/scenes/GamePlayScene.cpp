@@ -95,7 +95,6 @@ void GamePlayScene::Update() {
 	collisionManager_->ClearColliders();
 	collisionManager_->CheckAllCollision();
 
-	input_->Update();
 	debugCamera_->Update();
 
 	viewProjection_.translation_ = debugCamera_->GetViewProjection()->translation_;
@@ -103,7 +102,13 @@ void GamePlayScene::Update() {
 	viewProjection_.UpdateMatrix();
 
 	if (input_->PressKey(DIK_A)) {
-		OutputDebugStringA("Hit A\n");
+		OutputDebugStringA("Press A\n");
+	}
+	if (input_->ReleaseKey(DIK_S)) {
+		OutputDebugStringA("Release S\n");
+	}
+	if (input_->TriggerKey(DIK_D)) {
+		OutputDebugStringA("Trigger D\n");
 	}
 
 	directionalLight_.direction = Normalise(directionalLight_.direction);
