@@ -66,7 +66,6 @@ void CreateSprite::SettingVertex(const float& sizeX, const float& sizeY) {
 	indexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite_));
 
 	//座標の設定
-
 	vertexData_[0].position = { 0.0f,sizeX,0.0f,1.0f };
 	vertexData_[1].position = { 0.0f,0.0f,0.0f,1.0f };
 	vertexData_[2].position = { sizeY,sizeX,0.0f,1.0f };
