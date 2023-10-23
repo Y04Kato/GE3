@@ -20,11 +20,7 @@ void GamePlayScene::Initialize() {
 	isTriangleDraw2_ = false;
 
 	//スプライト
-	spriteData_.positionLeftTop[0] = { 0.0f,0.0f,0.0f,1.0f };
-	spriteData_.positionRightDown[0] = { 640.0f,360.0f,0.0f,1.0f };
-	spriteData_.positionLeftTop[1] = { 0.0f,0.0f,0.0f,1.0f };
-	spriteData_.positionRightDown[1] = { 640.0f,360.0f,0.0f,1.0f };
-	spriteData_.material = { 1.0f,1.0f,1.0f,1.0f };
+	spriteMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
 	spriteTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	SpriteuvTransform_ = {
 		{1.0f,1.0f,1.0f},
@@ -34,7 +30,7 @@ void GamePlayScene::Initialize() {
 
 	for (int i = 0; i < 2; i++) {
 		sprite_[i] = new CreateSprite();
-		sprite_[i]->Initialize(spriteData_.positionLeftTop[i], spriteData_.positionRightDown[i]);
+		sprite_[i]->Initialize(360.0f, 640.0f);
 	}
 
 	isSpriteDraw_ = false;
@@ -141,7 +137,7 @@ void GamePlayScene::Update() {
 			if (ImGui::TreeNode("Triangle1")) {
 				ImGui::DragFloat3("Translate", worldTransformTriangle_[0].translation_.num, 0.05f);
 				ImGui::DragFloat3("Rotate", worldTransformTriangle_[0].rotation_.num, 0.05f);
-				ImGui::DragFloat3("Scale", worldTransformTriangle_[0].scale_.num, 0.05f);
+				ImGui::DragFloat2("Scale", worldTransformTriangle_[0].scale_.num, 0.05f);
 				ImGui::ColorEdit4("", triangleMaterial_[0].num, 0);
 				ImGui::TreePop();
 			}
@@ -150,7 +146,7 @@ void GamePlayScene::Update() {
 			if (ImGui::TreeNode("Triangle2")) {
 				ImGui::DragFloat3("Translate", worldTransformTriangle_[1].translation_.num, 0.05f);
 				ImGui::DragFloat3("Rotate", worldTransformTriangle_[1].rotation_.num, 0.05f);
-				ImGui::DragFloat3("Scale", worldTransformTriangle_[1].scale_.num, 0.05f);
+				ImGui::DragFloat2("Scale", worldTransformTriangle_[1].scale_.num, 0.05f);
 				ImGui::ColorEdit4("", triangleMaterial_[1].num, 0);
 				ImGui::TreePop();
 			}
@@ -171,7 +167,7 @@ void GamePlayScene::Update() {
 		ImGui::DragFloat3("Scale", worldTransformSphere_.scale_.num, 0.05f);
 		ImGui::ColorEdit4("", sphereMaterial_.num, 0);
 		ImGui::SliderInt("ChangeTexture", &texture_, 1, 2);
-		ImGui::DragFloat4("LightColor", directionalLight_.color.num, 1.0f);
+		ImGui::DragFloat3("LightColor", directionalLight_.color.num, 1.0f);
 		ImGui::DragFloat3("lightDirection", directionalLight_.direction.num, 0.1f);
 		ImGui::TreePop();
 	}
@@ -184,10 +180,10 @@ void GamePlayScene::Update() {
 				isSpriteDraw_ = false;
 			}
 		}
-		ImGui::DragFloat3("Translate", spriteTransform_.translate.num, 0.05f);
+		ImGui::DragFloat2("Translate", spriteTransform_.translate.num, 0.05f);
 		ImGui::DragFloat3("Rotate", spriteTransform_.rotate.num, 0.05f);
-		ImGui::DragFloat3("Scale", spriteTransform_.scale.num, 0.05f);
-		ImGui::ColorEdit4("", spriteData_.material.num, 0);
+		ImGui::DragFloat2("Scale", spriteTransform_.scale.num, 0.05f);
+		ImGui::ColorEdit4("", spriteMaterial_.num, 0);
 		ImGui::DragFloat2("uvScale", SpriteuvTransform_.scale.num, 0.1f);
 		ImGui::DragFloat3("uvTranslate", SpriteuvTransform_.translate.num, 0.1f);
 		ImGui::DragFloat("uvRotate", &SpriteuvTransform_.rotate.num[2], 0.1f);
@@ -238,7 +234,7 @@ void GamePlayScene::Draw() {
 
 	if (isSpriteDraw_) {
 		for (int i = 0; i < 1; i++) {//Sprite描画
-			sprite_[i]->Draw(spriteTransform_, SpriteuvTransform_, spriteData_.material, uvResourceNum_);
+			sprite_[i]->Draw(spriteTransform_, SpriteuvTransform_,spriteMaterial_, uvResourceNum_);
 		}
 	}
 #pragma endregion

@@ -1,10 +1,10 @@
 #include "CreateSprite.h"
 
-void CreateSprite::Initialize(const Vector4& a, const Vector4& b) {
+void CreateSprite::Initialize(const float& sizeX, const float& sizeY) {
 	dxCommon_ = DirectXCommon::GetInstance();
 	CJEngine_ = CitrusJunosEngine::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
-	SettingVertex(a, b);
+	SettingVertex(sizeX, sizeY);
 	SettingColor();
 	SettingTransform();
 }
@@ -40,7 +40,7 @@ void CreateSprite::Finalize() {
 
 }
 
-void CreateSprite::SettingVertex(const Vector4& a, const Vector4& b) {
+void CreateSprite::SettingVertex(const float& sizeX, const float& sizeY) {
 	//Sprite用のリソースを作る
 	vertexResourceSprite_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * 6);
 
@@ -66,12 +66,13 @@ void CreateSprite::SettingVertex(const Vector4& a, const Vector4& b) {
 	indexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite_));
 
 	//座標の設定
-	vertexData_[0].position = { a.num[0],b.num[1],0.0f,1.0f };
-	vertexData_[1].position = { a.num[0],a.num[1],0.0f,1.0f };
-	vertexData_[2].position = { b.num[0],b.num[1],0.0f,1.0f };
-	vertexData_[3].position = { a.num[0],a.num[1],0.0f,1.0f };
-	vertexData_[4].position = { b.num[0],a.num[1],0.0f,1.0f };
-	vertexData_[5].position = { b.num[0],b.num[1],0.0f,1.0f };
+
+	vertexData_[0].position = { 0.0f,sizeX,0.0f,1.0f };
+	vertexData_[1].position = { 0.0f,0.0f,0.0f,1.0f };
+	vertexData_[2].position = { sizeY,sizeX,0.0f,1.0f };
+	vertexData_[3].position = { 0.0f,0.0f,0.0f,1.0f };
+	vertexData_[4].position = { sizeY,0.0f,0.0f,1.0f };
+	vertexData_[5].position = { sizeY,sizeX,0.0f,1.0f };
 
 	//Texcoordの設定
 	vertexData_[0].texcoord = { 0.0f,1.0f };
