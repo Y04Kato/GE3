@@ -437,7 +437,9 @@ void CitrusJunosEngine::BeginFrame() {
 	dxCommon_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
 
 	//開発用UIの処理
+#ifdef _DEBUG
 	ImGui::ShowDemoWindow();
+#endif
 }
 
 void CitrusJunosEngine::PreDraw3D() {

@@ -14,6 +14,7 @@ void DebugCamera::initialize() {
 }
 
 void DebugCamera::Update() {
+#ifdef DEBUG
 	if (input_->PressKey(DIK_UPARROW)) {
 		viewProjection_.rotation_.num[0] -= 0.05f;
 	}
@@ -31,6 +32,7 @@ void DebugCamera::Update() {
 	ImGui::SliderFloat3("rotation", viewProjection_.rotation_.num, -20, 20);
 	ImGui::SliderFloat3("translation", viewProjection_.translation_.num, -20, 20);
 	ImGui::End();
+#endif
 	viewProjection_.UpdateMatrix();
 }
 
