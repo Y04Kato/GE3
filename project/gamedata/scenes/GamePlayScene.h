@@ -43,7 +43,7 @@ private:
 	WorldTransform worldTransformSphere_;
 	Vector4 sphereMaterial_;
 
-	Model* model_;
+	std::unique_ptr<Model> model_;
 	WorldTransform worldTransformModel_;
 	Vector4 modelMaterial_;
 

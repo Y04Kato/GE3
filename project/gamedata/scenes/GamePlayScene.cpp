@@ -48,8 +48,7 @@ void GamePlayScene::Initialize() {
 	isSphereDraw_ = false;
 
 	//objモデル
-	model_ = new Model();
-	model_->Initialize("project/gamedata/resources/fence", "fence.obj");
+	model_.reset(Model::CreateModelFromObj("project/gamedata/resources/fence", "fence.obj"));
 	worldTransformModel_.Initialize();
 	modelMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
 
@@ -258,9 +257,6 @@ void GamePlayScene::Finalize() {
 
 	sphere_->Finalize();
 	delete sphere_;
-
-	model_->Finalize();
-	delete model_;
 
 	audio_->SoundUnload(&soundData1_);
 }
