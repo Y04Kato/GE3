@@ -77,7 +77,7 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 // TransformNormal
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
-Vector3 Transform(const Vector3& v, const Matrix4x4& m);
+Vector3 TransformN(const Vector3& v, const Matrix4x4& m);
 
 //Vector2の計算
 Vector2 Add(const Vector2& v1, const Vector2& v2);

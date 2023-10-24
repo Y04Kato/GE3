@@ -437,8 +437,7 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 	return result;
 }
 
-Vector3 Transform(const Vector3& v, const Matrix4x4& m)
-{
+Vector3 TransformN(const Vector3& v, const Matrix4x4& m){
 	Vector3 transform;
 	float transformMatrix[4];
 	float matrix1x4[4] = { v.num[0],v.num[1],v.num[2] ,1.0f};
@@ -530,7 +529,7 @@ Matrix4x4 operator+(Matrix4x4 m1, Matrix4x4 m2) { return Add(m1, m2); }
 Matrix4x4 operator-(Matrix4x4 m1, Matrix4x4 m2) { return Subtruct(m1, m2); }
 Matrix4x4 operator+=(Matrix4x4 m1, Matrix4x4 m2) { return Add(m1, m2); }
 Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2) { return Multiply(m1, m2); }
-Vector3 operator*(const Vector3& v, const Matrix4x4& matrix) { return Transform(v, matrix); }
+Vector3 operator*(const Vector3& v, const Matrix4x4& matrix) { return TransformN(v, matrix); }
 Matrix4x4 operator-=(Matrix4x4& m1, const Matrix4x4& m2) { return m1 = Subtruct(m1, m2); }
 Matrix4x4 operator*=(Matrix4x4& m1, const Matrix4x4& m2) { return m1 = Multiply(m1, m2); }
 
