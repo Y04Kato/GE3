@@ -1,6 +1,6 @@
 #include "MatrixCalculation.h"
 
-Vector3 Normalise(const Vector3& v) {
+Vector3 Normalize(const Vector3& v) {
 	float len = Length(v);
 	if (len != 0) {
 		return { v.num[0] / len,v.num[1] / len,v.num[2] / len };
@@ -172,7 +172,7 @@ Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2) {
 }
 
 //行列の減法
-Matrix4x4 Sub(const Matrix4x4& m1, const Matrix4x4& m2) {
+Matrix4x4 Subtruct(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 result;
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
@@ -437,10 +437,115 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 	return result;
 }
 
-Vector3 Add(const Vector3& translation, const Vector3& move) {
-	Vector3 result;
-	result.num[0] = translation.num[0] + move.num[0];
-	result.num[1] = translation.num[1] + move.num[1];
-	result.num[2] = translation.num[2] + move.num[2];
+Vector3 Transform(const Vector3& v, const Matrix4x4& m)
+{
+	Vector3 transform;
+	float transformMatrix[4];
+	float matrix1x4[4] = { v.num[0],v.num[1],v.num[2] ,1.0f};
+	for (int column = 0; column < 4; column++)
+	{
+		transformMatrix[column] = 0.0f;
+		for (int i = 0; i < 4; i++)
+		{
+			transformMatrix[column] += matrix1x4[i] * m.m[i][column];
+		}
+	}
+	float w = transformMatrix[3];
+	assert(w != 0.0f);
+	transform.num[0] = transformMatrix[0] / w;
+	transform.num[1] = transformMatrix[1] / w;
+	transform.num[2] = transformMatrix[2] / w;
+	return transform;
+}
+
+Vector2 Add(const Vector2& v1, const Vector2& v2) {
+	Vector2 result;
+	result.num[0] = v1.num[0] + v2.num[0];
+	result.num[1] = v1.num[1] + v2.num[1];
 	return result;
 }
+
+Vector2 Subtruct(const Vector2& v1, const Vector2& v2) {
+	Vector2 v;
+	v.num[0] = v1.num[0] - v2.num[0];
+	v.num[1] = v1.num[1] - v2.num[1];
+	return v;
+}
+
+Vector2 Multiply(float scalar, const Vector2& v) {
+	Vector2 returnV;
+	returnV.num[0] = v.num[0] * scalar;
+	returnV.num[1] = v.num[1] * scalar;
+	return returnV;
+}
+
+Vector3 Add(const Vector3& v1, const Vector3& v2) {
+	Vector3 result;
+	result.num[0] = v1.num[0] + v2.num[0];
+	result.num[1] = v1.num[1] + v2.num[1];
+	result.num[2] = v1.num[2] + v2.num[2];
+	return result;
+}
+
+Vector3 Subtruct(const Vector3& v1, const Vector3& v2) {
+	Vector3 v;
+	v.num[0] = v1.num[0] - v2.num[0];
+	v.num[1] = v1.num[1] - v2.num[1];
+	v.num[2] = v1.num[2] - v2.num[2];
+	return v;
+}
+
+Vector3 Multiply(float scalar, const Vector3& v) {
+	Vector3 returnV;
+	returnV.num[0] = v.num[0] * scalar;
+	returnV.num[1] = v.num[1] * scalar;
+	returnV.num[2] = v.num[2] * scalar;
+	return returnV;
+}
+
+Vector2 Lerp(const Vector2& v1, const Vector2& v2, float t) { return v1 + Multiply(t, v2 - v1); }
+
+Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t){
+	return v1 + Multiply(t, v2 - v1);
+}
+
+
+Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t){
+	Vector3 a = Normalize(v1), b = Normalize(v2);
+	float s = (1.0f - t) * Length(a) + t * Length(b);
+	Vector3 e1, e2;
+	e1 = float(1.0f / Length(a)) * a;
+	e2 = float(1.0f / Length(b)) * b;
+
+	float dot = std::clamp(Dot(a, b), 0.0f, 1.0f);
+	float theta = std::acos(dot/*/( Length(a)*Length(b))*/);
+	if (theta == 0.0f){
+		return Lerp(a, b, t);
+	}
+	return s * ((std::sinf((1.0f - t) * theta) / std::sinf(theta)) * a + (std::sinf(t * theta) / std::sinf(theta)) * b);
+}
+
+Matrix4x4 operator+(Matrix4x4 m1, Matrix4x4 m2) { return Add(m1, m2); }
+
+Matrix4x4 operator-(Matrix4x4 m1, Matrix4x4 m2) { return Subtruct(m1, m2); }
+Matrix4x4 operator+=(Matrix4x4 m1, Matrix4x4 m2) { return Add(m1, m2); }
+Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2) { return Multiply(m1, m2); }
+Vector3 operator*(const Vector3& v, const Matrix4x4& matrix) { return Transform(v, matrix); }
+Matrix4x4 operator-=(Matrix4x4& m1, const Matrix4x4& m2) { return m1 = Subtruct(m1, m2); }
+Matrix4x4 operator*=(Matrix4x4& m1, const Matrix4x4& m2) { return m1 = Multiply(m1, m2); }
+
+Vector2 operator+(const Vector2& v1, const Vector2& v2) { return Add(v1, v2); }
+Vector2 operator-(const Vector2& v1, const Vector2& v2) { return Subtruct(v1, v2); }
+Vector2 operator*(float k, const Vector2& v) { return Multiply(k, v); }
+Vector2 operator*(const Vector2& v, float k) { return Multiply(k, v); }
+
+
+Vector3 operator+(const Vector3& v1, const Vector3& v2) { return Add(v1, v2); }
+Vector3 operator-(const Vector3& v1, const Vector3& v2) { return Subtruct(v1, v2); }
+Vector3 operator*(float k, const Vector3& v) { return Multiply(k, v); }
+Vector3 operator*(const Vector3& v, float k) { return Multiply(k, v); }
+
+Vector3 operator+=(Vector3& v1, Vector3& v2) { return v1 = Add(v1, v2); }
+Vector3 operator+=(Vector3& v1, const Vector3& v2) { return v1 = Add(v1, v2); }
+
+Vector3 operator-=(const Vector3& v1, const Vector3& v2) { return Subtruct(v1, v2); }

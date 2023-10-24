@@ -14,7 +14,7 @@ void DebugCamera::initialize() {
 }
 
 void DebugCamera::Update() {
-#ifdef DEBUG
+#ifdef _DEBUG
 	if (input_->PressKey(DIK_UPARROW)) {
 		viewProjection_.rotation_.num[0] -= 0.05f;
 	}

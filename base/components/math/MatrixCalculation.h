@@ -3,12 +3,34 @@
 #include "Vector.h"
 #include <assert.h>
 #include <cmath>
+#include <algorithm>
 
-float cot(float theta);
 float Length(const Vector3& v);
 float Dot(const Vector3& v1, const Vector3& v2);
 
-Vector3 Normalise(const Vector3& v);
+Matrix4x4 operator+(Matrix4x4 m1, Matrix4x4 m2);
+Matrix4x4 operator-(Matrix4x4 m1, Matrix4x4 m2);
+Vector3 operator*(const Vector3& v, const Matrix4x4& matrix);
+Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2);
+Matrix4x4 operator+=(Matrix4x4 m1, Matrix4x4 m2);
+Matrix4x4 operator-=(Matrix4x4& m1, const Matrix4x4& m2);
+Matrix4x4 operator*=(Matrix4x4& m1, const Matrix4x4& m2);
+
+Vector2 operator+(const Vector2&, const Vector2&);
+Vector2 operator-(const Vector2&, const Vector2&);
+Vector2 operator*(float k, const Vector2& v);
+Vector2 operator*(const Vector2& v, float k);
+
+Vector3 operator+(const Vector3&, const Vector3&);
+Vector3 operator-(const Vector3&, const Vector3&);
+Vector3 operator*(float k, const Vector3& v);
+Vector3 operator*(const Vector3& v, float k);
+
+Vector3 operator+=(Vector3&, Vector3&);
+Vector3 operator+=(Vector3&, const Vector3&);
+Vector3 operator-=(const Vector3&, const Vector3&);
+
+Vector3 Normalize(const Vector3& v);
 
 //X軸回転行列
 Matrix4x4 MakeRotateXMatrix(float radian);
@@ -32,7 +54,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2);
 
 //行列の減法
-Matrix4x4 Sub(const Matrix4x4& m1, const Matrix4x4& m2);
+Matrix4x4 Subtruct(const Matrix4x4& m1, const Matrix4x4& m2);
 
 //行列の積
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
@@ -55,5 +77,18 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 // TransformNormal
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
-//Vector3同士の足し算
-Vector3 Add(const Vector3& translation, const Vector3& move);
+Vector3 Transform(const Vector3& v, const Matrix4x4& m);
+
+//Vector2の計算
+Vector2 Add(const Vector2& v1, const Vector2& v2);
+Vector2 Subtruct(const Vector2& v1, const Vector2& v2);
+Vector2 Multiply(float scalar, const Vector2& v);
+
+//Vector3の計算
+Vector3 Add(const Vector3& v1, const Vector3& v2);
+Vector3 Subtruct(const Vector3& v1, const Vector3& v2);
+Vector3 Multiply(float scalar, const Vector3& v);
+
+Vector2 Lerp(const Vector2& v1, const Vector2& v2, float t);
+Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t);
+Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t);

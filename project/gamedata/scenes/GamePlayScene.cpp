@@ -64,7 +64,7 @@ void GamePlayScene::Initialize() {
 	audio_ = Audio::GetInstance();
 	soundData1_ = audio_->SoundLoadWave("project/gamedata/resources/fanfare.wav");
 	//音声再生
-	audio_->SoundPlayWave(soundData1_);
+	audio_->SoundPlayWave(soundData1_,0.1f);
 
 	// デバッグカメラの初期化
 	debugCamera_ = DebugCamera::GetInstance();
@@ -106,7 +106,7 @@ void GamePlayScene::Update() {
 		OutputDebugStringA("Trigger D\n");
 	}
 
-	directionalLight_.direction = Normalise(directionalLight_.direction);
+	directionalLight_.direction = Normalize(directionalLight_.direction);
 
 	for (int i = 0; i < 2; i++) {
 		worldTransformTriangle_[i].UpdateMatrix();
