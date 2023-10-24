@@ -17,7 +17,7 @@ public:
 
 	virtual void OnCollision() = 0;
 
-	virtual  WorldTransform GetWorldTransform() = 0;
+	virtual WorldTransform GetWorldTransform() = 0;
 
 	uint32_t GetCollisionAttribute() const { return collisionAttribute_; }
 	void SetCollisionAttribute(uint32_t attribute) { collisionAttribute_ = attribute; }
