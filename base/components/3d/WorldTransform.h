@@ -1,6 +1,6 @@
 #pragma once
 #include "DirectXCommon.h"
-#include "components/math/MatrixCalculation.h"
+#include "MatrixCalculation.h"
 
 struct ConstBufferDataWorldTransform {
 	Matrix4x4 matWorld; // ローカル→ワールド変換行列

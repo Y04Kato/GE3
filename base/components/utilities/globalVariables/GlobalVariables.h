@@ -1,5 +1,5 @@
 #pragma once
-#include "components/math/Vector.h"
+#include "Vector.h"
 #include <json.hpp>
 #include <map>
 #include <string>

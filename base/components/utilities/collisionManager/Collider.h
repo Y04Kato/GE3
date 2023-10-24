@@ -1,6 +1,6 @@
 #pragma once
-#include "components/math/Vector.h"
-#include "components/3d/WorldTransform.h"
+#include "Vector.h"
+#include "WorldTransform.h"
 #include <cstdint>
 
 class Collider {

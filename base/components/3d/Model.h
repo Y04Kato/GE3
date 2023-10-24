@@ -1,9 +1,9 @@
 #pragma once
 #include "DirectXCommon.h"
 #include "CJEngine.h"
-#include "components/3d/WorldTransform.h"
-#include "components/3d/ViewProjection.h"
-#include "components/manager/TextureManager.h"
+#include "WorldTransform.h"
+#include "ViewProjection.h"
+#include "TextureManager.h"
 #include <string>
 #include <fstream>
 #include <sstream>

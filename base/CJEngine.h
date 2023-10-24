@@ -1,8 +1,8 @@
 #pragma once
 #include "DirectXCommon.h"
-#include "components/math/Vector.h"
-#include "components/2d/CreateTriangle.h"
-#include "components/math/MatrixCalculation.h"
+#include "Vector.h"
+#include "CreateTriangle.h"
+#include "MatrixCalculation.h"
 
 #include "DirectXTex/d3dx12.h"
 #include <dxcapi.h>

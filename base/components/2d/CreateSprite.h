@@ -1,8 +1,8 @@
 #pragma once
 #include "DirectXCommon.h"
 #include "CJEngine.h"
-#include "components/3d/WorldTransform.h"
-#include "components/manager/TextureManager.h"
+#include "WorldTransform.h"
+#include "TextureManager.h"
 #include<wrl.h>
 
 class CreateSprite{

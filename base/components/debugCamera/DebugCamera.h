@@ -1,6 +1,6 @@
 #pragma once
-#include "components/3d/ViewProjection.h"
-#include "components/input/Input.h"
+#include "ViewProjection.h"
+#include "Input.h"
 
 class DebugCamera{
 public:

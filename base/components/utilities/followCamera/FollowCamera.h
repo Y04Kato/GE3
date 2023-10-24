@@ -1,7 +1,7 @@
 #pragma once
-#include "components/input/Input.h"
-#include "components/3d/WorldTransform.h"
-#include "components/3d/ViewProjection.h"
+#include "Input.h"
+#include "WorldTransform.h"
+#include "ViewProjection.h"
 
 class FollowCamera {
 public:
