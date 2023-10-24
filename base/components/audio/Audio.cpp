@@ -87,7 +87,7 @@ void Audio::SoundUnload(SoundData* soundData) {
 	soundData->wfex = {};
 }
 
-void Audio::SoundPlayWave(const SoundData& soundData) {
+void Audio::SoundPlayWave(const SoundData& soundData, float AudioVolume) {
 	HRESULT result;
 
 	//波形フォーマットを元にSourceVoiceの生成
@@ -103,6 +103,7 @@ void Audio::SoundPlayWave(const SoundData& soundData) {
 
 	//波形データの再生
 	result = pSourceVoice->SubmitSourceBuffer(&buf);
+	result = pSourceVoice->SetVolume(AudioVolume);
 	result = pSourceVoice->Start();
 }
 

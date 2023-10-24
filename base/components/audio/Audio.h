@@ -41,7 +41,7 @@ public:
 	void SoundUnload(SoundData* soundData);
 
 	//音声再生
-	void SoundPlayWave(const SoundData& soundData);
+	void SoundPlayWave(const SoundData& soundData, float AudioVolume);
 
 	void Finalize();
 

@@ -24,8 +24,8 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 		return;
 	}
 
-	Vector3 posA = colliderA->GetWorldPosition();
-	Vector3 posB = colliderB->GetWorldPosition();
+	Vector3 posA = colliderA->GetWorldTransform().translation_;
+	Vector3 posB = colliderB->GetWorldTransform().translation_;
 	float radA = colliderA->Getradius();
 	float radB = colliderB->Getradius();
 
