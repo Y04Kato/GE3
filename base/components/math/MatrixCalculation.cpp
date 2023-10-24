@@ -91,6 +91,14 @@ Matrix4x4 MakeRotateZMatrix(float radian) {
 	return result;
 }
 
+//軸回転行列
+Matrix4x4 MakeRotateMatrix(Vector3 theta) {
+	Matrix4x4 rotateX = MakeRotateXMatrix(theta.num[0]);
+	Matrix4x4 rotateY = MakeRotateYMatrix(theta.num[1]);
+	Matrix4x4 rotateZ = MakeRotateZMatrix(theta.num[2]);
+	return Multiply(rotateX, Multiply(rotateY, rotateZ));
+}
+
 //平行移動
 Matrix4x4 MakeTranslateMatrix(Vector3 translate) {
 	Matrix4x4 result;
@@ -438,23 +446,21 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 }
 
 Vector3 TransformN(const Vector3& v, const Matrix4x4& m){
-	Vector3 transform;
+	Vector3 result;
 	float transformMatrix[4];
-	float matrix1x4[4] = { v.num[0],v.num[1],v.num[2] ,1.0f};
-	for (int column = 0; column < 4; column++)
-	{
+	float matrix4[4] = { v.num[0],v.num[1],v.num[2] ,1.0f};
+	for (int column = 0; column < 4; column++){
 		transformMatrix[column] = 0.0f;
-		for (int i = 0; i < 4; i++)
-		{
-			transformMatrix[column] += matrix1x4[i] * m.m[i][column];
+		for (int i = 0; i < 4; i++){
+			transformMatrix[column] += matrix4[i] * m.m[i][column];
 		}
 	}
 	float w = transformMatrix[3];
 	assert(w != 0.0f);
-	transform.num[0] = transformMatrix[0] / w;
-	transform.num[1] = transformMatrix[1] / w;
-	transform.num[2] = transformMatrix[2] / w;
-	return transform;
+	result.num[0] = transformMatrix[0] / w;
+	result.num[1] = transformMatrix[1] / w;
+	result.num[2] = transformMatrix[2] / w;
+	return result;
 }
 
 Vector2 Add(const Vector2& v1, const Vector2& v2) {

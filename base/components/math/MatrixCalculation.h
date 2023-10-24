@@ -8,6 +8,7 @@
 float Length(const Vector3& v);
 float Dot(const Vector3& v1, const Vector3& v2);
 
+//演算子オーバーロード
 Matrix4x4 operator+(Matrix4x4 m1, Matrix4x4 m2);
 Matrix4x4 operator-(Matrix4x4 m1, Matrix4x4 m2);
 Vector3 operator*(const Vector3& v, const Matrix4x4& matrix);
@@ -40,6 +41,9 @@ Matrix4x4 MakeRotateYMatrix(float radian);
 
 //Z軸回転行列
 Matrix4x4 MakeRotateZMatrix(float radian);
+
+//軸回転行列
+Matrix4x4 MakeRotateMatrix(Vector3 theta);
 
 //平行移動
 Matrix4x4 MakeTranslateMatrix(Vector3 translate);

@@ -118,6 +118,12 @@
     <Filter Include="ソース ファイル\base\components\2d">
       <UniqueIdentifier>{2f06ec7a-d3e3-467e-968a-e9a7f1b51d9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\base\components\utilities\followCamera">
+      <UniqueIdentifier>{61ec65fc-b430-48b0-b4ae-5b651180c194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\base\components\utilities\followCamera">
+      <UniqueIdentifier>{9d5e802a-597b-41d6-acec-fe4bc4a2dfc9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -206,6 +212,9 @@
     </ClCompile>
     <ClCompile Include="base\components\3d\ViewProjection.cpp">
       <Filter>ソース ファイル\base\components\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="base\components\utilities\followCamera\FollowCamera.cpp">
+      <Filter>ソース ファイル\base\components\utilities\followCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -324,6 +333,9 @@
     </ClInclude>
     <ClInclude Include="base\components\3d\ViewProjection.h">
       <Filter>ヘッダー ファイル\base\components\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="base\components\utilities\followCamera\FollowCamera.h">
+      <Filter>ヘッダー ファイル\base\components\utilities\followCamera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -96,6 +96,7 @@
     <ClCompile Include="base\components\audio\Audio.cpp" />
     <ClCompile Include="base\components\manager\TextureManager.cpp" />
     <ClCompile Include="base\components\utilities\convertString\ConvertString.cpp" />
+    <ClCompile Include="base\components\utilities\followCamera\FollowCamera.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\components\2d\CreateTriangle.cpp" />
     <ClCompile Include="base\components\3d\CreateSphere.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="base\components\audio\Audio.h" />
     <ClInclude Include="base\components\manager\TextureManager.h" />
     <ClInclude Include="base\components\utilities\convertString\ConvertString.h" />
+    <ClInclude Include="base\components\utilities\followCamera\FollowCamera.h" />
     <ClInclude Include="base\DirectXCommon.h" />
     <ClInclude Include="base\components\2d\CreateTriangle.h" />
     <ClInclude Include="base\components\3d\CreateSphere.h" />
