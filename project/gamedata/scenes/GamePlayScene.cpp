@@ -48,9 +48,6 @@ void GamePlayScene::Initialize() {
 	worldTransformModel_.Initialize();
 	modelMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
 
-	//ライト
-	directionalLight_ = { {1.0f,1.0f,1.0f,1.0f},{0.0f,-1.0f,0.0f},1.0f };
-
 	//テクスチャ
 	texture_ = 1;
 	uvResourceNum_ = textureManager_->Load("project/gamedata/resources/uvChecker.png");
@@ -105,8 +102,6 @@ void GamePlayScene::Update() {
 	if (input_->TriggerKey(DIK_D)) {
 		OutputDebugStringA("Trigger D\n");
 	}
-
-	directionalLight_.direction = Normalize(directionalLight_.direction);
 
 	for (int i = 0; i < 2; i++) {
 		worldTransformTriangle_[i].UpdateMatrix();
@@ -167,8 +162,6 @@ void GamePlayScene::Update() {
 		ImGui::DragFloat3("Scale", worldTransformSphere_.scale_.num, 0.05f);
 		ImGui::ColorEdit4("", sphereMaterial_.num, 0);
 		ImGui::SliderInt("ChangeTexture", &texture_, 1, 2);
-		ImGui::DragFloat3("LightColor", directionalLight_.color.num, 1.0f);
-		ImGui::DragFloat3("lightDirection", directionalLight_.direction.num, 0.1f);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("Sprite")) {//スプライト
@@ -214,18 +207,18 @@ void GamePlayScene::Draw() {
 	CJEngine_->PreDraw3D();
 
 	if (isTriangleDraw1_) {//Triangle描画
-		triangle_[0]->Draw(worldTransformTriangle_[0], viewProjection_, triangleMaterial_[0], uvResourceNum_, directionalLight_);
+		triangle_[0]->Draw(worldTransformTriangle_[0], viewProjection_, triangleMaterial_[0], uvResourceNum_);
 	}
 	if (isTriangleDraw2_) {//Triangle描画
-		triangle_[1]->Draw(worldTransformTriangle_[1], viewProjection_, triangleMaterial_[1], uvResourceNum_, directionalLight_);
+		triangle_[1]->Draw(worldTransformTriangle_[1], viewProjection_, triangleMaterial_[1], uvResourceNum_);
 	}
 
 	if (isSphereDraw_) {
-		sphere_->Draw(worldTransformSphere_, viewProjection_, sphereMaterial_, texture_, directionalLight_);
+		sphere_->Draw(worldTransformSphere_, viewProjection_, sphereMaterial_, texture_);
 	}
 
 	if (isModelDraw_) {
-		model_->Draw(worldTransformModel_, viewProjection_, modelMaterial_, directionalLight_);
+		model_->Draw(worldTransformModel_, viewProjection_, modelMaterial_);
 	}
 #pragma endregion
 

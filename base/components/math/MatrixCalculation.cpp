@@ -611,6 +611,7 @@ Vector2 operator-(const Vector2& v1, const Vector2& v2) { return Subtruct(v1, v2
 Vector2 operator*(float k, const Vector2& v) { return Multiply(k, v); }
 Vector2 operator*(const Vector2& v, float k) { return Multiply(k, v); }
 
+Vector3 operator-(const Vector3& v) { return { -v.num[0], -v.num[1], -v.num[2] }; }
 
 Vector3 operator+(const Vector3& v1, const Vector3& v2) { return Add(v1, v2); }
 Vector3 operator-(const Vector3& v1, const Vector3& v2) { return Subtruct(v1, v2); }

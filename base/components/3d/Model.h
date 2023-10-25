@@ -7,13 +7,14 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include "DirectionalLight.h"
 #include<wrl.h>
 
 class Model {
 public:
 	void Initialize(const std::string& directoryPath, const std::string& filename);
 
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, const DirectionalLight& light);
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material);
 	
 	void Finalize();
 
@@ -39,6 +40,7 @@ private:
 
 	uint32_t texture_;
 
+	DirectionalLights* directionalLights_;
 	DirectionalLight* directionalLight_;
 	Microsoft::WRL::ComPtr <ID3D12Resource> directionalLightResource_;
 

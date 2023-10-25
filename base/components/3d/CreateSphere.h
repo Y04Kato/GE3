@@ -3,6 +3,7 @@
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 #include "TextureManager.h"
+#include "DirectionalLight.h"
 #include<wrl.h>
 
 class CitrusJunosEngine;
@@ -11,7 +12,7 @@ class CreateSphere{
 public:
 	void Initialize();
 
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, uint32_t index, const DirectionalLight& light);
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, uint32_t index);
 	
 	void Finalize();
 
@@ -36,6 +37,7 @@ private:
 	uint32_t kSubDivision_;
 	uint32_t vertexCount_;
 
+	DirectionalLights* directionalLights_;
 	DirectionalLight* directionalLight_;
 	Microsoft::WRL::ComPtr <ID3D12Resource> directionalLightResource_;
 

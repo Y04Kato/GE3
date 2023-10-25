@@ -24,9 +24,13 @@ void SceneManager::Initialize() {
 	input_ = Input::GetInstance();
 	input_->Initialize();
 
+	//Light
+	directionalLight_ = DirectionalLights::GetInstance();
+	directionalLight_->Initialize();
+
 	//TextureManager
-	textureManager = TextureManager::GetInstance();
-	textureManager->Initialize();
+	textureManager_ = TextureManager::GetInstance();
+	textureManager_->Initialize();
 
 	//CSV
 	GlobalVariables::GetInstance()->LoadFiles();
@@ -53,6 +57,7 @@ void SceneManager::Update() {
 		CJEngine_->BeginFrame();
 		input_->Update();
 		GlobalVariables::GetInstance()->Update();
+		directionalLight_->Update();
 		scene_[Iscene::sceneNo]->Update();
 		scene_[Iscene::sceneNo]->Draw();
 		CJEngine_->EndFrame();

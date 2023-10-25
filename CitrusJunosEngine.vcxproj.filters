@@ -124,6 +124,12 @@
     <Filter Include="ソース ファイル\base\components\utilities\followCamera">
       <UniqueIdentifier>{9d5e802a-597b-41d6-acec-fe4bc4a2dfc9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\base\components\utilities\directionalLight">
+      <UniqueIdentifier>{d99d984d-b179-4154-8cd1-2f898ea4a4b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\base\components\utilities\directionalLight">
+      <UniqueIdentifier>{dfd6f818-eb7c-42f7-a209-09796a12d3d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -215,6 +221,9 @@
     </ClCompile>
     <ClCompile Include="base\components\utilities\followCamera\FollowCamera.cpp">
       <Filter>ソース ファイル\base\components\utilities\followCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="base\components\utilities\directionalLight\DirectionalLight.cpp">
+      <Filter>ソース ファイル\base\components\utilities\directionalLight</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -336,6 +345,9 @@
     </ClInclude>
     <ClInclude Include="base\components\utilities\followCamera\FollowCamera.h">
       <Filter>ヘッダー ファイル\base\components\utilities\followCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="base\components\utilities\directionalLight\DirectionalLight.h">
+      <Filter>ヘッダー ファイル\base\components\utilities\directionalLight</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -27,11 +27,11 @@ Vector3 operator-(const Vector3&, const Vector3&);
 Vector3 operator*(float k, const Vector3& v);
 Vector3 operator*(const Vector3& v, float k);
 
+Vector3 operator-(const Vector3& v);
+
 Vector3 operator+=(Vector3&, Vector3&);
 Vector3 operator+=(Vector3&, const Vector3&);
 Vector3 operator-=(const Vector3&, const Vector3&);
-
-Vector3 Normalize(const Vector3& v);
 
 //X軸回転行列
 Matrix4x4 MakeRotateXMatrix(float radian);
@@ -85,7 +85,7 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
 Vector3 TransformN(const Vector3& v, const Matrix4x4& m);
 
-Vector3 Normalise(const Vector3& v);
+Vector3 Normalize(const Vector3& v);
 
 Vector3 GetXAxis(const Matrix4x4& m);
 

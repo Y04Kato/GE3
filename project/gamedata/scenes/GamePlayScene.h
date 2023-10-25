@@ -47,8 +47,6 @@ private:
 	WorldTransform worldTransformModel_;
 	Vector4 modelMaterial_;
 
-	DirectionalLight directionalLight_;
-
 	uint32_t uvResourceNum_;
 	uint32_t monsterBallResourceNum_;
 

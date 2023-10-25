@@ -4,6 +4,7 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
     dxCommon_ = DirectXCommon::GetInstance();
     CJEngine_ = CitrusJunosEngine::GetInstance();
     textureManager_ = TextureManager::GetInstance();
+    directionalLights_ = DirectionalLights::GetInstance();
 
     modelData_ = LoadObjFile(directoryPath, filename);
     texture_ = textureManager_->Load(modelData_.material.textureFilePath);
@@ -13,7 +14,7 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
     CreateDictionalLight();
 }
 
-void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, const DirectionalLight& light){
+void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material){
     Transform uvTransform = { { 1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
 
     Matrix4x4 uvtransformMtrix = MakeScaleMatrix(uvTransform.scale);
@@ -22,7 +23,7 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 
     *material_ = { material,false };
     material_->uvTransform = uvtransformMtrix;
-    *directionalLight_ = light;
+    *directionalLight_ = directionalLights_->GetDirectionalLight();
 
     dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
     //形状を設定。PS0にせっていしているものとはまた別

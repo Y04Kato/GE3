@@ -3,6 +3,7 @@
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 #include "TextureManager.h"
+#include "DirectionalLight.h"
 #include<wrl.h>
 
 class CitrusJunosEngine;
@@ -11,7 +12,7 @@ class CreateTriangle {
 public:
 	void Initialize();
 
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, uint32_t index, const DirectionalLight& light);
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, uint32_t index);
 
 	void Finalize();
 
@@ -39,6 +40,7 @@ private:
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 
+	DirectionalLights* directionalLights_;
 	DirectionalLight* directionalLight_;
 	Microsoft::WRL::ComPtr <ID3D12Resource> directionalLightResource_;
 };

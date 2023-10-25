@@ -5,6 +5,7 @@
 #include "Audio.h"
 #include "GlobalVariables.h"
 #include "TextureManager.h"
+#include "DirectionalLight.h"
 
 //sceneInclude
 #include "GameTitleScene.h"
@@ -33,7 +34,9 @@ private:
 
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
-	TextureManager* textureManager = nullptr;
+	TextureManager* textureManager_ = nullptr;
+
+	DirectionalLights* directionalLight_ = nullptr;
 
 	std::unique_ptr<Iscene>scene_[SCENE_MAX];
 };

@@ -6,6 +6,7 @@ void CreateTriangle::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	CJEngine_ = CitrusJunosEngine::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
+	directionalLights_ = DirectionalLights::GetInstance();
 	SettingVertex();
 	SettingColor();
 	SettingDictionalLight();
@@ -23,7 +24,7 @@ void CreateTriangle::Initialize() {
 	vertexData_[2].texcoord = { 1.0f,1.0f };
 }
 
-void CreateTriangle::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, uint32_t index, const DirectionalLight& light) {
+void CreateTriangle::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, uint32_t index) {
 	Transform uvTransform = { { 1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
 	Matrix4x4 uvtransformMtrix = MakeScaleMatrix(uvTransform.scale);
 	uvtransformMtrix = Multiply(uvtransformMtrix, MakeRotateZMatrix(uvTransform.rotate.num[2]));
@@ -31,7 +32,7 @@ void CreateTriangle::Draw(const WorldTransform& worldTransform, const ViewProjec
 
 	*materialData_ = { material,false };
 	materialData_->uvTransform = uvtransformMtrix;
-	*directionalLight_ = light;
+	*directionalLight_ = directionalLights_->GetDirectionalLight();
 
 	//VBVを設定
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
