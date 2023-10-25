@@ -87,7 +87,7 @@ void Audio::SoundUnload(SoundData* soundData) {
 	soundData->wfex = {};
 }
 
-void Audio::SoundPlayWave(const SoundData& soundData, float AudioVolume) {
+void Audio::SoundPlayWave(const SoundData& soundData, float AudioVolume, bool isLoop) {
 	HRESULT result;
 
 	//波形フォーマットを元にSourceVoiceの生成
@@ -100,6 +100,10 @@ void Audio::SoundPlayWave(const SoundData& soundData, float AudioVolume) {
 	buf.pAudioData = soundData.pBuffer;
 	buf.AudioBytes = soundData.bufferSize;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
+
+	if (isLoop == true) {
+		buf.LoopCount = XAUDIO2_LOOP_INFINITE;
+	}
 
 	//波形データの再生
 	result = pSourceVoice->SubmitSourceBuffer(&buf);
