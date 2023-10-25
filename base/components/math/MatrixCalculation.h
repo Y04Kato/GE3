@@ -45,6 +45,8 @@ Matrix4x4 MakeRotateZMatrix(float radian);
 //軸回転行列
 Matrix4x4 MakeRotateMatrix(Vector3 theta);
 
+Matrix4x4 MakeRotateXYZMatrix(const Vector3& rotate);
+
 //平行移動
 Matrix4x4 MakeTranslateMatrix(Vector3 translate);
 
@@ -82,6 +84,26 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
 Vector3 TransformN(const Vector3& v, const Matrix4x4& m);
+
+Vector3 Normalise(const Vector3& v);
+
+Vector3 GetXAxis(const Matrix4x4& m);
+
+Vector3 GetYAxis(const Matrix4x4& m);
+
+Vector3 GetZAxis(const Matrix4x4& m);
+
+void GetOrientations(const Matrix4x4& m, Vector3 orientations[3]);
+
+Matrix4x4& SetTranslate(Matrix4x4& m, const Vector3& v);
+
+Matrix4x4 MakeInverseMatrix(const Matrix4x4& rotate, const Vector3& translate);
+
+Matrix4x4 MakeRotateMatrixFromOrientations(const Vector3 orientations[3]);
+
+bool IsCollision(const AABB& aabb, const StructSphere& sphere);
+
+bool IsCollision(const OBB& obb, const StructSphere& sphere);
 
 //Vector2の計算
 Vector2 Add(const Vector2& v1, const Vector2& v2);

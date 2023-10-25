@@ -13,7 +13,8 @@ void FollowCamera::Update() {
 		Matrix4x4 rotateMatrix = MakeRotateMatrix(viewprojection_.rotation_);
 
 		offset = TransformNormal(offset, rotateMatrix);
-		viewprojection_.translation_ = Add(target_->translation_, offset);
+		Vector3 worldTranslate = { target_->matWorld_.m[3][0],target_->matWorld_.m[3][1],target_->matWorld_.m[3][2] };
+		viewprojection_.translation_ = Add(worldTranslate, offset);
 	}
 
 	XINPUT_STATE joystate;

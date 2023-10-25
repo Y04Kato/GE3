@@ -99,6 +99,16 @@ Matrix4x4 MakeRotateMatrix(Vector3 theta) {
 	return Multiply(rotateX, Multiply(rotateY, rotateZ));
 }
 
+Matrix4x4 MakeRotateXYZMatrix(const Vector3& rotate) {
+	Vector3 s = { std::sin(rotate.num[0]), std::sin(rotate.num[1]), std::sin(rotate.num[2]) };
+	Vector3 c = { std::cos(rotate.num[0]), std::cos(rotate.num[1]), std::cos(rotate.num[2]) };
+	return {
+		c.num[1] * c.num[2],c.num[1] * s.num[2],-s.num[1],0.0f,
+		s.num[0] * s.num[1] * c.num[2] - c.num[0] * s.num[2],	s.num[0] * s.num[1] * s.num[2] + c.num[0] * c.num[2],	s.num[0] * c.num[1],	0.0f,
+		c.num[0] * s.num[1] * c.num[2] + s.num[0] * s.num[2],	c.num[0] * s.num[1] * s.num[2] - s.num[0] * c.num[2],	c.num[0] * c.num[1],	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f };
+}
+
 //平行移動
 Matrix4x4 MakeTranslateMatrix(Vector3 translate) {
 	Matrix4x4 result;
@@ -528,6 +538,63 @@ Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t){
 		return Lerp(a, b, t);
 	}
 	return s * ((std::sinf((1.0f - t) * theta) / std::sinf(theta)) * a + (std::sinf(t * theta) / std::sinf(theta)) * b);
+}
+
+Vector3 GetXAxis(const Matrix4x4& m) {
+	return { m.m[0][0],m.m[0][1],m.m[0][2] };
+}
+
+Vector3 GetYAxis(const Matrix4x4& m) {
+	return { m.m[1][0],m.m[1][1],m.m[1][2] };
+}
+
+Vector3 GetZAxis(const Matrix4x4& m) {
+	return { m.m[2][0],m.m[2][1],m.m[2][2] };
+}
+
+void GetOrientations(const Matrix4x4& m, Vector3 orientations[3]) {
+	orientations[0] = GetXAxis(m);
+	orientations[1] = GetYAxis(m);
+	orientations[2] = GetZAxis(m);
+}
+
+Matrix4x4& SetTranslate(Matrix4x4& m, const Vector3& v) {
+	m.m[3][0] = v.num[0], m.m[3][1] = v.num[1], m.m[3][2] = v.num[2];
+	return m;
+}
+
+Matrix4x4 MakeInverseMatrix(const Matrix4x4& rotate, const Vector3& translate) {
+	Matrix4x4 RT = Transpose(rotate);
+	return SetTranslate(RT, -translate * RT);
+}
+
+Matrix4x4 MakeRotateMatrixFromOrientations(const Vector3 orientations[3]) {
+	return {
+		orientations[0].num[0],orientations[0].num[1],orientations[0].num[2],0.0f,
+		orientations[1].num[0],orientations[1].num[1],orientations[1].num[2],0.0f,
+		orientations[2].num[0],orientations[2].num[1],orientations[2].num[2],0.0f,
+		0.0f,0.0f,0.0f,1.0f };
+}
+
+bool IsCollision(const AABB& aabb, const StructSphere& sphere) {
+	Vector3 clossestPoint{
+		std::clamp(sphere.center.num[0], aabb.min.num[0], aabb.max.num[0]),
+		std::clamp(sphere.center.num[1], aabb.min.num[1], aabb.max.num[1]),
+		std::clamp(sphere.center.num[2], aabb.min.num[2], aabb.max.num[2])
+	};
+
+	float distance = Length(Subtruct(clossestPoint, sphere.center));
+
+	return distance <= sphere.radius;
+}
+
+bool IsCollision(const OBB& obb, const StructSphere& sphere) {
+	Matrix4x4 obbWorldInverse = MakeInverseMatrix(MakeRotateMatrixFromOrientations(obb.orientation), obb.center);
+	Vector3 centerInOBBLocalSpace = sphere.center * obbWorldInverse;
+	AABB aabbOBBLocal{ .min = -obb.size, .max = obb.size };
+	StructSphere sphereObbLocal{ centerInOBBLocalSpace, sphere.radius };
+
+	return IsCollision(aabbOBBLocal, sphereObbLocal);
 }
 
 Matrix4x4 operator+(Matrix4x4 m1, Matrix4x4 m2) { return Add(m1, m2); }
