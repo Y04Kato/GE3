@@ -55,3 +55,19 @@ struct ModelData {
 	std::vector<VertexData> vertices;
 	MaterialData material;
 };
+
+struct AABB {
+	Vector3 min;
+	Vector3 max;
+};
+
+struct OBB {
+	Vector3 center;
+	Vector3 orientation[3];
+	Vector3 size;
+};
+
+struct StructSphere {
+	Vector3 center;
+	float radius;
+};
