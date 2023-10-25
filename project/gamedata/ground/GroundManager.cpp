@@ -6,7 +6,7 @@ void GroundManager::Initialize(){
 	}
 
 	moveGround_ = std::make_unique<MovingGround>();
-	movemodel_.reset(Model::CreateModelFromObj("project/gamedata/resources/move", "move.obj"));
+	movemodel_.reset(Model::CreateModelFromObj("project/gamedata/resources/moveFloor", "moveFloor.obj"));
 	model_.reset(Model::CreateModelFromObj("project/gamedata/resources/cube", "cube.obj"));
 
 	ground_[0]->Initialize(model_.get(), { 0.0f,0.0f,-5.0f }, { 3.0f,1.0f,17.0f });

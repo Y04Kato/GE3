@@ -28,7 +28,7 @@ void Enemy::Initialize(const std::vector<Model*>& models){
 	SetParent(&GetWorldTransformBody());
 	SetCollisionAttribute(CollisionConfig::kCollisionAttributeEnemy);
 	SetCollisionMask(~CollisionConfig::kCollisionAttributeEnemy);
-	move_ = { 0.3f,0.0f,0.0f };
+	move_ = { 0.2f,0.0f,0.0f };
 
 	directionalLight_ = { {1.0f,1.0f,1.0f,1.0f},{-0.2f,-1.5f,0.4f},1.0f };
 

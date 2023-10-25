@@ -75,10 +75,6 @@ void Player::Update() {
 		return;
 	}
 
-	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_Y) {
-		GlobalVariables::GetInstance()->SaveFile("Player");
-	}
-
 	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_X) {
 		behaviorRequest_ = Behavior::kAttack;
 	}
