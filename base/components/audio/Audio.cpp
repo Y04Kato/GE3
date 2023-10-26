@@ -37,7 +37,7 @@ SoundData Audio::SoundLoadWave(const char* filename) {
 
 	//Formatチャンクの読み込み
 	FormatChunk format = {};
-	// チャンヘッダーの確認
+	// チャンクヘッダーの確認
 	file.read((char*)&format, sizeof(ChunkHeader));
 	if (strncmp(format.chunk.id, "fmt ", 4) != 0) {
 		assert(0);
@@ -55,6 +55,60 @@ SoundData Audio::SoundLoadWave(const char* filename) {
 		//読み取り位置をJUNKチャンクの終わりまで進める
 		file.seekg(data.size, std::ios_base::cur);
 		//再読み込み
+		file.read((char*)&data, sizeof(data));
+	}
+	//LISTチャンクを検出した場合
+	if (strncmp(data.id, "LIST", 4) == 0) {
+		// 読み取りチャンクを検出した場合
+		file.seekg(data.size, std::ios_base::cur);
+		// 再読み込み
+		file.read((char*)&data, sizeof(data));
+	}
+	//INFOチャンクを検出した場合
+	if (strncmp(data.id, "INFO", 4) == 0) {
+		// 読み取りチャンクを検出した場合
+		file.seekg(data.size, std::ios_base::cur);
+		// 再読み込み
+		file.read((char*)&data, sizeof(data));
+	}
+	//bextチャンクを検出した場合
+	if (strncmp(data.id, "bext", 4) == 0) {
+		// 読み取りチャンクを検出した場合
+		file.seekg(data.size, std::ios_base::cur);
+		// 再読み込み
+		file.read((char*)&data, sizeof(data));
+	}
+	//REAPERチャンクを検出した場合
+	if (strncmp(data.id, "REAPER", 6) == 0) {
+		// 読み取りチャンクを検出した場合
+		file.seekg(data.size, std::ios_base::cur);
+		// 再読み込み
+		file.read((char*)&data, sizeof(data));
+	}
+	//FLLRチャンクを検出した場合
+	if (strncmp(data.id, "FLLR", 4) == 0) {
+		// 読み取りチャンクを検出した場合
+		file.seekg(data.size, std::ios_base::cur);
+		// 再読み込み
+		file.read((char*)&data, sizeof(data));
+	}
+
+	if (strncmp(data.id, "LGWV", 4) == 0) {
+		// 読み取りチャンクを検出した場合
+		file.seekg(data.size, std::ios_base::cur);
+		// 再読み込み
+		file.read((char*)&data, sizeof(data));
+	}
+	if (strncmp(data.id, "ResU", 4) == 0) {
+		// 読み取りチャンクを検出した場合
+		file.seekg(data.size, std::ios_base::cur);
+		// 再読み込み
+		file.read((char*)&data, sizeof(data));
+	}
+	if (strncmp(data.id, "cue", 4) == 0) {
+		// 読み取りチャンクを検出した場合
+		file.seekg(data.size, std::ios_base::cur);
+		// 再読み込み
 		file.read((char*)&data, sizeof(data));
 	}
 
