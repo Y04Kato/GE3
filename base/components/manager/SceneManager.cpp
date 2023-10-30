@@ -62,6 +62,7 @@ void SceneManager::Update() {
 		scene_[Iscene::sceneNo]->Draw();
 		CJEngine_->EndFrame();
 
+		//// ESCキーが押されたらループを抜ける
 		if (input_->TriggerKey(DIK_ESCAPE)) {
 			break;
 		}
