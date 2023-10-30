@@ -34,7 +34,7 @@ private:
 	WorldTransform worldTransformTriangle_[2];
 	Vector4 triangleMaterial_[2];
 
-	CreateSprite* sprite_[2];
+	CreateSprite* sprite_;
 	Transform spriteTransform_;
 	Transform SpriteuvTransform_;
 	Vector4 spriteMaterial_;

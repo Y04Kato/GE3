@@ -6,6 +6,12 @@ void GamePlayScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 
+	//テクスチャ
+	texture_ = 1;
+	uvResourceNum_ = textureManager_->Load("project/gamedata/resources/uvChecker.png");
+
+	monsterBallResourceNum_ = textureManager_->Load("project/gamedata/resources/monsterBall.png");
+
 	//三角形
 	for (int i = 0; i < 2; i++) {
 		triangle_[i] = new CreateTriangle();
@@ -27,11 +33,10 @@ void GamePlayScene::Initialize() {
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
 	};
-
-	for (int i = 0; i < 2; i++) {
-		sprite_[i] = new CreateSprite();
-		sprite_[i]->Initialize(Vector2{ 360.0f, 640.0f }, Vector2{ 0.0f, 0.0f },true,false);
-	}
+	sprite_ = new CreateSprite();
+	sprite_->Initialize(Vector2{ 100.0f,100.0f }, uvResourceNum_, false, false);
+	//sprite_->SetTextureLTSize(Vector2{ 0.0f,0.0f }, Vector2{ 100.0f,100.0f });
+	//sprite_->SetTextureInitialSize();
 
 	isSpriteDraw_ = false;
 
@@ -48,12 +53,6 @@ void GamePlayScene::Initialize() {
 	worldTransformModel_.Initialize();
 	modelMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
 
-	//テクスチャ
-	texture_ = 1;
-	uvResourceNum_ = textureManager_->Load("project/gamedata/resources/uvChecker.png");
-
-	monsterBallResourceNum_ = textureManager_->Load("project/gamedata/resources/monsterBall.png");
-
 	//Input
 	input_ = Input::GetInstance();
 
@@ -61,7 +60,7 @@ void GamePlayScene::Initialize() {
 	audio_ = Audio::GetInstance();
 	soundData1_ = audio_->SoundLoadWave("project/gamedata/resources/conjurer.wav");
 	//音声再生
-	audio_->SoundPlayWave(soundData1_,0.1f,false);
+	audio_->SoundPlayWave(soundData1_, 0.1f, false);
 
 	// デバッグカメラの初期化
 	debugCamera_ = DebugCamera::GetInstance();
@@ -225,10 +224,8 @@ void GamePlayScene::Draw() {
 #pragma region 前景スプライト描画
 	CJEngine_->PreDraw2D();
 
-	if (isSpriteDraw_) {
-		for (int i = 0; i < 1; i++) {//Sprite描画
-			sprite_[i]->Draw(spriteTransform_, SpriteuvTransform_,spriteMaterial_, uvResourceNum_);
-		}
+	if (isSpriteDraw_) {//Sprite描画
+		sprite_->Draw(spriteTransform_, SpriteuvTransform_, spriteMaterial_);
 	}
 #pragma endregion
 }
@@ -239,10 +236,8 @@ void GamePlayScene::Finalize() {
 		delete triangle_[i];
 	}
 
-	for (int i = 0; i < 2; i++) {
-		sprite_[i]->Finalize();
-		delete sprite_[i];
-	}
+	sprite_->Finalize();
+	delete sprite_;
 
 	sphere_->Finalize();
 	delete sphere_;
