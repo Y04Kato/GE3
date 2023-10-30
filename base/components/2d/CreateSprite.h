@@ -7,7 +7,7 @@
 
 class CreateSprite{
 public:
-	void Initialize(const float& sizeX, const float& sizeY);
+	void Initialize(Vector2 size,Vector2 anchor,bool isFlipX,bool isFlipY);
 
 	void Draw(const Transform& transform, const Transform& uvTransform, const Vector4& material, uint32_t index);
 	void Finalize();
@@ -32,7 +32,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
 	Matrix4x4* wvpData_;
 private:
-	void SettingVertex(const float& sizeX, const float& sizeY);
+	void SettingVertex(Vector2 size, Vector2 anchor, bool isFlipX, bool isFlipY);
 	void SettingColor();
 	void SettingTransform();
 };

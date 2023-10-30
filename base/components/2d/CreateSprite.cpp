@@ -1,10 +1,10 @@
 #include "CreateSprite.h"
 
-void CreateSprite::Initialize(const float& sizeX, const float& sizeY) {
+void CreateSprite::Initialize(Vector2 size, Vector2 anchor, bool isFlipX, bool isFlipY) {
 	dxCommon_ = DirectXCommon::GetInstance();
 	CJEngine_ = CitrusJunosEngine::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
-	SettingVertex(sizeX, sizeY);
+	SettingVertex(size, anchor,isFlipX,isFlipY);
 	SettingColor();
 	SettingTransform();
 }
@@ -28,7 +28,7 @@ void CreateSprite::Draw(const Transform& transform, const Transform& uvTransform
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	dxCommon_->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite_);
 
-	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
 	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(index));
@@ -40,7 +40,7 @@ void CreateSprite::Finalize() {
 
 }
 
-void CreateSprite::SettingVertex(const float& sizeX, const float& sizeY) {
+void CreateSprite::SettingVertex(Vector2 size, Vector2 anchor, bool isFlipX, bool isFlipY) {
 	//Sprite用のリソースを作る
 	vertexResourceSprite_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * 6);
 
@@ -65,28 +65,38 @@ void CreateSprite::SettingVertex(const float& sizeX, const float& sizeY) {
 
 	indexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite_));
 
+	float left = (0.0f - anchor.num[0]) * size.num[0];
+	float right = (1.0f - anchor.num[0]) * size.num[0];
+	float top = (0.0f - anchor.num[1]) * size.num[1];
+	float bottom = (1.0f - anchor.num[1]) * size.num[1];
+
+	if (isFlipX) {
+		left = -left;
+		right = -right;
+	}
+	if (isFlipY) {
+		top = -top;
+		bottom = -bottom;
+	}
+
 	//座標の設定
-	vertexData_[0].position = { 0.0f,sizeX,0.0f,1.0f };
-	vertexData_[1].position = { 0.0f,0.0f,0.0f,1.0f };
-	vertexData_[2].position = { sizeY,sizeX,0.0f,1.0f };
-	vertexData_[3].position = { 0.0f,0.0f,0.0f,1.0f };
-	vertexData_[4].position = { sizeY,0.0f,0.0f,1.0f };
-	vertexData_[5].position = { sizeY,sizeX,0.0f,1.0f };
+	vertexData_[0].position = { left,bottom,0.0f,1.0f };
+	vertexData_[1].position = { left,top,0.0f,1.0f };
+	vertexData_[2].position = { right,bottom,0.0f,1.0f };
+	vertexData_[3].position = { right,top,0.0f,1.0f };
 
 	//Texcoordの設定
 	vertexData_[0].texcoord = { 0.0f,1.0f };
 	vertexData_[1].texcoord = { 0.0f,0.0f };
 	vertexData_[2].texcoord = { 1.0f,1.0f };
-	vertexData_[3].texcoord = { 0.0f,0.0f };
-	vertexData_[4].texcoord = { 1.0f,0.0f };
-	vertexData_[5].texcoord = { 1.0f,1.0f };
+	vertexData_[3].texcoord = { 1.0f,0.0f };
 
 	indexDataSprite_[0] = 0;
 	indexDataSprite_[1] = 1;
 	indexDataSprite_[2] = 2;
-	indexDataSprite_[3] = 3;
-	indexDataSprite_[4] = 4;
-	indexDataSprite_[5] = 5;
+	indexDataSprite_[3] = 1;
+	indexDataSprite_[4] = 3;
+	indexDataSprite_[5] = 2;
 
 	for (int i = 0; i < 6; i++) {
 		vertexData_[i].normal = { 0.0f,0.0f,-1.0f };

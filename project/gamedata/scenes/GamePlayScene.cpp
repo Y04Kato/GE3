@@ -30,7 +30,7 @@ void GamePlayScene::Initialize() {
 
 	for (int i = 0; i < 2; i++) {
 		sprite_[i] = new CreateSprite();
-		sprite_[i]->Initialize(360.0f, 640.0f);
+		sprite_[i]->Initialize(Vector2{ 360.0f, 640.0f }, Vector2{ 0.0f, 0.0f },true,false);
 	}
 
 	isSpriteDraw_ = false;
