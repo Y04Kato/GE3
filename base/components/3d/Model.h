@@ -20,6 +20,8 @@ public:
 
 	ModelData modelData_;
 	
+	void SetDirectionalLightFlag(bool isDirectionalLight);
+
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
 
@@ -42,6 +44,7 @@ private:
 
 	DirectionalLights* directionalLights_;
 	DirectionalLight* directionalLight_;
+	bool isDirectionalLight_ = false;
 	Microsoft::WRL::ComPtr <ID3D12Resource> directionalLightResource_;
 
 private:

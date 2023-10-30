@@ -21,7 +21,7 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
     uvtransformMtrix = Multiply(uvtransformMtrix, MakeRotateZMatrix(uvTransform.rotate.num[2]));
     uvtransformMtrix = Multiply(uvtransformMtrix, MakeTranslateMatrix(uvTransform.translate));
 
-    *material_ = { material,false };
+    *material_ = { material,isDirectionalLight_ };
     material_->uvTransform = uvtransformMtrix;
     *directionalLight_ = directionalLights_->GetDirectionalLight();
 
@@ -169,5 +169,8 @@ void Model::SetColor(){
 void Model::CreateDictionalLight(){
     directionalLightResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice(), sizeof(DirectionalLight));
     directionalLightResource_->Map(0, NULL, reinterpret_cast<void**>(&directionalLight_));
+}
 
+void Model::SetDirectionalLightFlag(bool isDirectionalLight) {
+    isDirectionalLight_ = isDirectionalLight;
 }

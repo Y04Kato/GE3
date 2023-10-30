@@ -92,20 +92,22 @@ SoundData Audio::SoundLoadWave(const char* filename) {
 		// 再読み込み
 		file.read((char*)&data, sizeof(data));
 	}
-
+	//LGWVチャンクを検出した場合
 	if (strncmp(data.id, "LGWV", 4) == 0) {
 		// 読み取りチャンクを検出した場合
 		file.seekg(data.size, std::ios_base::cur);
 		// 再読み込み
 		file.read((char*)&data, sizeof(data));
 	}
+	//ResUチャンクを検出した場合
 	if (strncmp(data.id, "ResU", 4) == 0) {
 		// 読み取りチャンクを検出した場合
 		file.seekg(data.size, std::ios_base::cur);
 		// 再読み込み
 		file.read((char*)&data, sizeof(data));
 	}
-	if (strncmp(data.id, "cue", 4) == 0) {
+	//cueチャンクを検出した場合
+	if (strncmp(data.id, "cue", 3) == 0) {
 		// 読み取りチャンクを検出した場合
 		file.seekg(data.size, std::ios_base::cur);
 		// 再読み込み
