@@ -15,10 +15,10 @@
 
 class GamePlayScene :public Iscene {
 public:
-	void Initialize();
-	void Update();
-	void Draw();
-	void Finalize();
+	void Initialize() override;
+	void Update() override;
+	void Draw() override;
+	void Finalize() override;
 
 	void ApplyGlobalVariables();
 

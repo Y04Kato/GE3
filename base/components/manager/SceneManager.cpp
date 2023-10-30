@@ -61,6 +61,10 @@ void SceneManager::Update() {
 		scene_[Iscene::sceneNo]->Update();
 		scene_[Iscene::sceneNo]->Draw();
 		CJEngine_->EndFrame();
+
+		if (input_->TriggerKey(DIK_ESCAPE)) {
+			break;
+		}
 	}
 }
 
