@@ -10,7 +10,7 @@ void GameTitleScene::Initialize(){
 
 void GameTitleScene::Update(){
 	if (input_->TriggerKey(DIK_N)) {
-		sceneNo = 1;
+		sceneNo = GAME_SCENE;
 	}
 
 	ImGui::Begin("debug");

@@ -14,13 +14,6 @@
 
 class SceneManager {
 public:
-	//シーン一覧、シーン追加時はここに追加する
-	enum SCENE {
-		TITLE_SCENE,
-		GAME_SCENE,
-		SCENE_MAX
-	};
-
 	void Run();
 
 	void Initialize();
