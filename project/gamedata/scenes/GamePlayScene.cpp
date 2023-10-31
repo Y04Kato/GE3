@@ -14,7 +14,7 @@ void GamePlayScene::Initialize() {
 
 	//三角形
 	for (int i = 0; i < 2; i++) {
-		triangle_[i] = new CreateTriangle();
+		triangle_[i] = std::make_unique <CreateTriangle>();
 		triangle_[i]->Initialize();
 		worldTransformTriangle_[i].Initialize();
 		triangleMaterial_[i] = { 1.0f,1.0f,1.0f,1.0f };
@@ -33,7 +33,7 @@ void GamePlayScene::Initialize() {
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
 	};
-	sprite_ = new CreateSprite();
+	sprite_ = std::make_unique <CreateSprite>();
 	sprite_->Initialize(Vector2{ 100.0f,100.0f }, uvResourceNum_, false, false);
 	//sprite_->SetTextureLTSize(Vector2{ 0.0f,0.0f }, Vector2{ 100.0f,100.0f });
 	sprite_->SetTextureInitialSize();
@@ -41,7 +41,7 @@ void GamePlayScene::Initialize() {
 	isSpriteDraw_ = false;
 
 	//球体
-	sphere_ = new CreateSphere();
+	sphere_ = std::make_unique <CreateSphere>();
 	sphere_->Initialize();
 	worldTransformSphere_.Initialize();
 	sphereMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
@@ -237,17 +237,6 @@ void GamePlayScene::Draw() {
 }
 
 void GamePlayScene::Finalize() {
-	for (int i = 0; i < 2; i++) {
-		triangle_[i]->Finalize();
-		delete triangle_[i];
-	}
-
-	sprite_->Finalize();
-	delete sprite_;
-
-	sphere_->Finalize();
-	delete sphere_;
-
 	audio_->SoundUnload(&soundData1_);
 }
 

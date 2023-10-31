@@ -30,16 +30,16 @@ private:
 
 	int blendCount_;
 
-	CreateTriangle* triangle_[2];
+	std::unique_ptr <CreateTriangle> triangle_[2];
 	WorldTransform worldTransformTriangle_[2];
 	Vector4 triangleMaterial_[2];
 
-	CreateSprite* sprite_;
+	std::unique_ptr <CreateSprite> sprite_;
 	Transform spriteTransform_;
 	Transform SpriteuvTransform_;
 	Vector4 spriteMaterial_;
 
-	CreateSphere* sphere_;
+	std::unique_ptr <CreateSphere> sphere_;
 	WorldTransform worldTransformSphere_;
 	Vector4 sphereMaterial_;
 
