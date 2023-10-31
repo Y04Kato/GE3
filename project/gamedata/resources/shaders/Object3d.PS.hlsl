@@ -1,4 +1,4 @@
-#include "object3d.hlsli"
+#include "Object3d.hlsli"
 
 ConstantBuffer<Material> gMaterial : register(b0);
 Texture2D<float32_t4> gTexture : register(t0);

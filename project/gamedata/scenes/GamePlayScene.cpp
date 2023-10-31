@@ -221,6 +221,12 @@ void GamePlayScene::Draw() {
 	}
 #pragma endregion
 
+#pragma region パーティクル描画
+	CJEngine_->PreDrawParticle();
+
+
+#pragma endregion
+
 #pragma region 前景スプライト描画
 	CJEngine_->PreDraw2D();
 

@@ -65,19 +65,23 @@ void CitrusJunosEngine::Initialize(const wchar_t* title, int32_t width, int32_t 
 
 	CreateRootSignature3D();
 	CreateRootSignature2D();
+	CreateRootSignatureParticle();
 
 	CreateInputlayOut3D();
 	CreateInputlayOut2D();
+	CreateInputlayOutParticle();
 
 	BlendState();
 
 	RasterizerState3D();
 	RasterizerState2D();
+	RasterizerStateParticle();
 
 	SettingDepth();
 
 	InitializePSO3D();
 	InitializePSO2D();
+	InitializePSOParticle();
 
 	ViewPort();
 
@@ -404,6 +408,142 @@ void CitrusJunosEngine::CreateInputlayOut2D() {
 }
 #pragma endregion
 
+#pragma region Particle用パイプライン
+void CitrusJunosEngine::CreateRootSignatureParticle() {
+	//RootSignature作成
+	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
+	descriptionRootSignature.Flags =
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+	//RootParameter作成、複数設定可能な為、配列に
+	D3D12_ROOT_PARAMETER rootParameters[5] = {};
+	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
+	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
+
+	//viewProjection
+	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//vertexShaderで使う
+	rootParameters[4].Descriptor.ShaderRegister = 1;//レジスタ番号を1にバインド
+
+	D3D12_DESCRIPTOR_RANGE descriptoraRange[1] = {};
+	descriptoraRange[0].BaseShaderRegister = 0;//0から始まる
+	descriptoraRange[0].NumDescriptors = 1;//数は1つ
+	descriptoraRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//SRVを使う
+	descriptoraRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//Descriptortableを使う
+	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VERTEXShaderを使う
+	rootParameters[1].DescriptorTable.pDescriptorRanges = descriptoraRange;//tableの中身の配列を指定
+	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptoraRange);//Tableで利用する数
+	
+	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//Descriptortableを使う
+	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
+	rootParameters[2].DescriptorTable.pDescriptorRanges = descriptoraRange;//tableの中身の配列を指定
+	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptoraRange);//Tableで利用する数
+
+	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; //PixcelShaderで使う
+	rootParameters[3].Descriptor.ShaderRegister = 1;//レジスタ番号1を使う
+
+	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};//Samplerの設定
+	staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;//バイリニアフィルタ
+	staticSamplers[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//０～１の範囲外をリピート
+	staticSamplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	staticSamplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	staticSamplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;//比較しない
+	staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;//ありったけのmipmapを使う
+	staticSamplers[0].ShaderRegister = 0;//レジスタ番号0を使う
+	staticSamplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
+	
+	descriptionRootSignature.pStaticSamplers = staticSamplers;
+	descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers);
+
+	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
+	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
+
+	//シリアライズしてバイナリにする
+	signatureBlobParticle_ = nullptr;
+	errorBlobParticle_ = nullptr;
+	HRESULT hr;
+	hr = D3D12SerializeRootSignature(&descriptionRootSignature,
+		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlobParticle_, &errorBlobParticle_);
+	if (FAILED(dxCommon_->GetHr())) {
+		Log(reinterpret_cast<char*>(errorBlobParticle_->GetBufferPointer()));
+		assert(false);
+	}
+	//バイナリを元に生成
+	rootSignatureParticle_ = nullptr;
+	hr = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlobParticle_->GetBufferPointer(),
+		signatureBlobParticle_->GetBufferSize(), IID_PPV_ARGS(&rootSignatureParticle_));
+	assert(SUCCEEDED(hr));
+}
+
+void CitrusJunosEngine::CreateInputlayOutParticle() {
+	inputElementDescsParticle_[0].SemanticName = "POSITION";
+	inputElementDescsParticle_[0].SemanticIndex = 0;
+	inputElementDescsParticle_[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	inputElementDescsParticle_[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+	inputElementDescsParticle_[1].SemanticName = "TEXCOORD";
+	inputElementDescsParticle_[1].SemanticIndex = 0;
+	inputElementDescsParticle_[1].Format = DXGI_FORMAT_R32G32_FLOAT;
+	inputElementDescsParticle_[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+	inputElementDescsParticle_[2].SemanticName = "NORMAL";
+	inputElementDescsParticle_[2].SemanticIndex = 0;
+	inputElementDescsParticle_[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	inputElementDescsParticle_[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+	inputLayoutDescParticle_.pInputElementDescs = inputElementDescsParticle_;
+	inputLayoutDescParticle_.NumElements = _countof(inputElementDescsParticle_);
+}
+
+void CitrusJunosEngine::RasterizerStateParticle() {
+	//裏面（時計回り）を表示しない
+	rasterizerDescParticle_.CullMode = D3D12_CULL_MODE_BACK;
+	//三角形の中を塗りつぶす
+	rasterizerDescParticle_.FillMode = D3D12_FILL_MODE_SOLID;
+
+	//Shaderをコンパイルする
+	vertexShaderBlobParticle_ = CompileShader(L"project/gamedata/resources/shaders/Particle.VS.hlsl",
+		L"vs_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
+	assert(vertexShaderBlobParticle_ != nullptr);
+
+
+	pixelShaderBlobParticle_ = CompileShader(L"project/gamedata/resources/shaders/Particle.PS.hlsl",
+		L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
+	assert(pixelShaderBlobParticle_ != nullptr);
+}
+
+void CitrusJunosEngine::InitializePSOParticle() {
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
+	graphicsPipelineStateDesc.pRootSignature = rootSignatureParticle_.Get();//RootSignature
+	graphicsPipelineStateDesc.InputLayout = inputLayoutDescParticle_;//Inputlayout
+	graphicsPipelineStateDesc.VS = { vertexShaderBlobParticle_->GetBufferPointer(),
+		vertexShaderBlobParticle_->GetBufferSize() };//vertexShader
+	graphicsPipelineStateDesc.PS = { pixelShaderBlobParticle_->GetBufferPointer(),
+		pixelShaderBlobParticle_->GetBufferSize() };//pixcelShader
+	graphicsPipelineStateDesc.BlendState = blendDesc_[kBlendModeNormal];//BlendState
+	graphicsPipelineStateDesc.RasterizerState = rasterizerDescParticle_;//rasterizerState
+	//書き込むRTVの情報
+	graphicsPipelineStateDesc.NumRenderTargets = 1;
+	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	//利用するトポロジ（形状）のタイプ。三角形
+	graphicsPipelineStateDesc.PrimitiveTopologyType =
+		D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	//どのように画面に色を打ち込むのかの設定（気にしなく良い）
+	graphicsPipelineStateDesc.SampleDesc.Count = 1;
+	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+	graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc_;
+	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	//実際に生成
+	graphicsPipelineStateParticle_ = nullptr;
+	HRESULT hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
+		IID_PPV_ARGS(&graphicsPipelineStateParticle_));
+	assert(SUCCEEDED(hr));
+}
+#pragma endregion
+
 void CitrusJunosEngine::ViewPort() {
 	//クライアント領域のサイズと一緒にして画面全体に表示
 	viewport_.Width = WinApp::kClientWidth;
@@ -454,6 +594,13 @@ void CitrusJunosEngine::PreDraw2D() {
 	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature2D_.Get());
 	//PS0を設定
 	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState2D_.Get());
+}
+
+void CitrusJunosEngine::PreDrawParticle() {
+	//RootSignatureを設定。PS0とは別途設定が必要Particle
+	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignatureParticle_.Get());
+	//PS0を設定
+	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineStateParticle_.Get());
 }
 
 void CitrusJunosEngine::EndFrame() {

@@ -225,6 +225,9 @@
     <ClCompile Include="base\components\utilities\directionalLight\DirectionalLight.cpp">
       <Filter>ソース ファイル\base\components\utilities\directionalLight</Filter>
     </ClCompile>
+    <ClCompile Include="base\components\2d\CreateParticle.cpp">
+      <Filter>ソース ファイル\base\components\2d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="project\gamedata\resources\shaders\Object3d.PS.hlsl">
@@ -237,6 +240,12 @@
       <Filter>ヘッダー ファイル\project\gamedata\resources\shaders</Filter>
     </FxCompile>
     <FxCompile Include="project\gamedata\resources\shaders\Object2d.PS.hlsl">
+      <Filter>ヘッダー ファイル\project\gamedata\resources\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="project\gamedata\resources\shaders\Particle.VS.hlsl">
+      <Filter>ヘッダー ファイル\project\gamedata\resources\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="project\gamedata\resources\shaders\Particle.PS.hlsl">
       <Filter>ヘッダー ファイル\project\gamedata\resources\shaders</Filter>
     </FxCompile>
   </ItemGroup>
@@ -349,6 +358,9 @@
     <ClInclude Include="base\components\utilities\directionalLight\DirectionalLight.h">
       <Filter>ヘッダー ファイル\base\components\utilities\directionalLight</Filter>
     </ClInclude>
+    <ClInclude Include="base\components\2d\CreateParticle.h">
+      <Filter>ヘッダー ファイル\base\components\2d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
@@ -360,6 +372,9 @@
       <Filter>ヘッダー ファイル\project\gamedata\resources\shaders</Filter>
     </None>
     <None Include="project\gamedata\resources\shaders\Object2d.hlsli">
+      <Filter>ヘッダー ファイル\project\gamedata\resources\shaders</Filter>
+    </None>
+    <None Include="project\gamedata\resources\shaders\Particle.hlsli">
       <Filter>ヘッダー ファイル\project\gamedata\resources\shaders</Filter>
     </None>
   </ItemGroup>

@@ -43,6 +43,7 @@ public:
 
 	void PreDraw3D();
 	void PreDraw2D();
+	void PreDrawParticle();
 
 	DirectXCommon* GetDirectXCommon() { return dxCommon_; }
 
@@ -123,4 +124,21 @@ private:
 	D3D12_RASTERIZER_DESC rasterizerDesc2D_{};
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs2D_[2];
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc2D_{};
+
+	//Particle用
+	void CreateRootSignatureParticle();
+	void CreateInputlayOutParticle();
+	void RasterizerStateParticle();
+	void InitializePSOParticle();
+	Microsoft::WRL::ComPtr <ID3DBlob> signatureBlobParticle_;
+	Microsoft::WRL::ComPtr <ID3DBlob> errorBlobParticle_;
+	Microsoft::WRL::ComPtr <ID3D12RootSignature> rootSignatureParticle_;
+
+	Microsoft::WRL::ComPtr <IDxcBlob> vertexShaderBlobParticle_;
+	Microsoft::WRL::ComPtr <IDxcBlob> pixelShaderBlobParticle_;
+
+	Microsoft::WRL::ComPtr <ID3D12PipelineState> graphicsPipelineStateParticle_;
+	D3D12_RASTERIZER_DESC rasterizerDescParticle_{};
+	D3D12_INPUT_ELEMENT_DESC inputElementDescsParticle_[3];
+	D3D12_INPUT_LAYOUT_DESC inputLayoutDescParticle_{};
 };
