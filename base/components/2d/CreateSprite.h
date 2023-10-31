@@ -7,7 +7,7 @@
 
 class CreateSprite {
 public:
-	void Initialize(Vector2 size, uint32_t index, bool isFlipX, bool isFlipY);
+	void Initialize(Vector2 size, uint32_t textureIndex, bool isFlipX, bool isFlipY);
 	void Draw(const Transform& transform, const Transform& uvTransform, const Vector4& material);
 	void Finalize();
 

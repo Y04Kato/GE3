@@ -7,7 +7,7 @@ void GamePlayScene::Initialize() {
 	textureManager_ = TextureManager::GetInstance();
 
 	//テクスチャ
-	texture_ = 1;
+	texture_ = 0;
 	uvResourceNum_ = textureManager_->Load("project/gamedata/resources/uvChecker.png");
 
 	monsterBallResourceNum_ = textureManager_->Load("project/gamedata/resources/monsterBall.png");
@@ -36,7 +36,7 @@ void GamePlayScene::Initialize() {
 	sprite_ = new CreateSprite();
 	sprite_->Initialize(Vector2{ 100.0f,100.0f }, uvResourceNum_, false, false);
 	//sprite_->SetTextureLTSize(Vector2{ 0.0f,0.0f }, Vector2{ 100.0f,100.0f });
-	//sprite_->SetTextureInitialSize();
+	sprite_->SetTextureInitialSize();
 
 	isSpriteDraw_ = false;
 
@@ -160,7 +160,7 @@ void GamePlayScene::Update() {
 		ImGui::DragFloat3("Rotate", worldTransformSphere_.rotation_.num, 0.05f);
 		ImGui::DragFloat3("Scale", worldTransformSphere_.scale_.num, 0.05f);
 		ImGui::ColorEdit4("", sphereMaterial_.num, 0);
-		ImGui::SliderInt("ChangeTexture", &texture_, 1, 2);
+		ImGui::SliderInt("ChangeTexture", &texture_, 0, 1);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("Sprite")) {//スプライト

@@ -1,12 +1,12 @@
 #include "CreateSprite.h"
 
-void CreateSprite::Initialize(Vector2 size, uint32_t index, bool isFlipX, bool isFlipY) {
+void CreateSprite::Initialize(Vector2 size, uint32_t textureIndex, bool isFlipX, bool isFlipY) {
 	dxCommon_ = DirectXCommon::GetInstance();
 	CJEngine_ = CitrusJunosEngine::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 
 	size_ = size;
-	index_ = index;
+	index_ = textureIndex;
 	isFlipX_ = isFlipX;
 	isFlipY_ = isFlipY;
 

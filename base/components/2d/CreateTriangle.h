@@ -12,7 +12,7 @@ class CreateTriangle {
 public:
 	void Initialize();
 
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, uint32_t index);
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, const Vector4& material, uint32_t textureIndex);
 
 	void Finalize();
 
